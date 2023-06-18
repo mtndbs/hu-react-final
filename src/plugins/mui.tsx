@@ -14,7 +14,17 @@ const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          marginBottom: "10px",
+          width: "100%",
+
+          margin: 2,
+          // marginBottom: "10px",
+        },
+      },
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          marginLeft: "0",
         },
       },
     },

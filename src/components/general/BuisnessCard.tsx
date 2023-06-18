@@ -15,7 +15,16 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 function BuisnessCard() {
   return (
-    <Card sx={{ maxWidth: 300, boxShadow: " 0px 8px 16px 0px rgba(0,0,0,0.2)" }}>
+    <Card
+      sx={{
+        maxWidth: 300,
+        boxShadow: " 0px 8px 16px 0px rgba(0,0,0,0.2)",
+        "@media (max-width: 600px)": {
+          // maxWidth: "100vw",
+          width: "70vw",
+        },
+      }}
+    >
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">

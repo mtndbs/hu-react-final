@@ -3,3 +3,43 @@
   align-items: center;
   justify-content: center;
 }
+.myBox {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  justify-content: space-between;
+}
+
+.master-wrap {
+  /* margin: 15px;
+  padding: 20px; */
+  display: flex !important;
+  justify-content: center !important;
+  justify-items: center !important;
+}
+
+/* Styles for screens up to 768px wide */
+@media (max-width: 600px) {
+  .myBox {
+    width: 90vw;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    flex-direction: column;
+  }
+
+  .master-wrap {
+    margin-left: 24px;
+  }
+}
+
+/* Styles for screens between 768px and 992px wide */
+@media screen and (min-width: 768px) and (max-width: 992px) {
+  /* Insert your styles here */
+}
+
+/* Styles for screens wider than 992px */
+@media screen and (min-width: 992px) {
+  /* Insert your styles here */
+  .mainPageStyle {
+    margin-left: 10% !important;
+  }
+}

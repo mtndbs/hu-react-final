@@ -1,35 +1,36 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Autocomplete, Button, Container } from "@mui/material";
-import Title from "../components/general/Title";
+import { Autocomplete, Button, Checkbox, Container, FormControlLabel } from "@mui/material";
+import Title from "../../components/general/Title";
 import { toast } from "react-toastify";
 import * as EmailValidator from "email-validator";
-import AuthButton from "../components/general/authButton";
+import AuthButton from "../../components/general/authButton";
 import { useNavigate } from "react-router-dom";
-import Circle from "../components/general/Circle";
-import { sxStyles } from "../hooks/sxStyles";
+import Circle from "../../components/general/Circle";
+import { sxStyles } from "../../hooks/sxStyles";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 // import "../signUpPage/signUp.css";
-import { isValidIsraeliPhoneNumber } from "../hooks/helpFunctions";
-import { countryList } from "../pages/signUpPage/allCountries";
+import "../../App.css";
 
-function CreatCardPage() {
+import { isValidIsraeliPhoneNumber, isValidPassword } from "../../hooks/helpFunctions";
+import { countryList } from "./allCountries";
+function SignPage() {
   // generic
   const [loadCircle, setLoadCircle] = React.useState(false);
   const addSxStyle = sxStyles();
   const navigate = useNavigate();
 
-  //Title useStates
-  const [title, setTitle] = React.useState("");
-  const [titleLabel, setTitleLabel] = React.useState("Title *");
-  const [titleErr, setTitleErr] = React.useState("");
-  const [fieldTitleErr, setfieldTitleErr] = React.useState(false);
-  // Sub title useStates
-  const [subTitle, setSubTitle] = React.useState("");
-  const [subTitleLabel, setSubTitleLabel] = React.useState("Sub Title *");
-  const [subTitleErr, setSubTitleErr] = React.useState("");
-  const [fieldSubTitleErr, setfieldSubTitleErr] = React.useState(false);
+  //name useStates
+  const [name, setName] = React.useState("");
+  const [nameLabel, setNameLabel] = React.useState("Name *");
+  const [nameErr, setNameErr] = React.useState("");
+  const [fieldNameErr, setfieldNameErr] = React.useState(false);
+  // last name useStates
+  const [lastName, setLastName] = React.useState("");
+  const [lastNameLabel, setLastNameLabel] = React.useState("Last name *");
+  const [lastNameErr, setLastNameErr] = React.useState("");
+  const [fieldLastNameErr, setfieldLastNameErr] = React.useState(false);
 
   // email useStates
   const [email, setEmail] = React.useState("");
@@ -42,21 +43,22 @@ function CreatCardPage() {
   const [phoneErr, setPhoneErr] = React.useState("");
   const [fieldPhoneErr, setfieldPhoneErr] = React.useState(false);
 
-  // description useStates
-  const [description, setDescription] = React.useState("");
-  const [descriptionLabel, setDescriptionLabel] = React.useState("Description *");
-  const [descriptionErr, setDescriptionErr] = React.useState("Description must be atleat 10 chars");
-  const [fieldDescriptionErr, setfieldDescriptionErr] = React.useState(false);
+  // password useStates
+  const [password, setPassword] = React.useState("");
+  const [passwordLabel, setPasswordLabel] = React.useState("Password *");
+  const [passwordErr, setPasswordErr] = React.useState("");
+  const [fieldPasswordErr, setfieldPasswordErr] = React.useState(false);
   // confirm password useState
-  const [web, setweb] = React.useState("");
-  const [webLabel, setwebLabel] = React.useState("Web");
-  const [webErr, setwebErr] = React.useState("");
-  const [fieldwebErr, setfieldwebErr] = React.useState(false);
+  const [confirmPassword, setconfirmPassword] = React.useState("");
+  const [confirmPasswordLabel, setConfirmPasswordLabel] = React.useState("Confirm password *");
+  const [confirmPasswordErr, setConfirmPasswordErr] = React.useState("");
+  const [fieldconfirmPasswordErr, setfieldConfirmPasswordErr] = React.useState(false);
   // image useState
   const [image, setImage] = React.useState("");
   // country useState
-  const [country, setCountry] = React.useState("");
   const [countrySelect, setCountrySelect] = React.useState<string | null>();
+
+  const [country, setCountry] = React.useState("");
   const [countryLabel, setCountryLabel] = React.useState("Country *");
   const [countryErr, setCountryErr] = React.useState("");
   const [fieldCountryErr, setfieldCountryErr] = React.useState(false);
@@ -74,12 +76,19 @@ function CreatCardPage() {
   const [houseNumber, setHouseNumber] = React.useState("");
   // zip useState
   const [zip, setZip] = React.useState("");
+  // bizz useState
+  const [bizChecked, setBizChecked] = React.useState(false);
+
+  const handleCheckboxChange = (event: any) => {
+    setBizChecked(event.target.checked);
+    console.log(bizChecked);
+  };
 
   // ===============
-  const setTitleCorrect = (bool: boolean) => {
-    setTitleErr(bool ? "" : "Title must be atleast 2 chars");
-    setTitleLabel(bool ? "Title*" : "Error");
-    setfieldTitleErr(bool ? false : true);
+  const setNameCorrect = (bool: boolean) => {
+    setNameErr(bool ? "" : "Name must be atleast 2 chars");
+    setNameLabel(bool ? "Name*" : "Error");
+    setfieldNameErr(bool ? false : true);
   };
   const setCountryCorrect = (bool: boolean) => {
     setCountryErr(bool ? "" : "Country is required");
@@ -98,10 +107,10 @@ function CreatCardPage() {
     setfieldStreetErr(bool ? false : true);
   };
 
-  const setSubTitleCorrect = (bool: boolean) => {
-    setSubTitleErr(bool ? "" : "Sub Title must be atleast 2 chars");
-    setfieldSubTitleErr(bool ? false : true);
-    setSubTitleLabel(bool ? "Sub Title*" : "Error");
+  const setLastNameCorrect = (bool: boolean) => {
+    setLastNameErr(bool ? "" : "Last name must be atleast 2 chars");
+    setfieldLastNameErr(bool ? false : true);
+    setLastNameLabel(bool ? "Last name*" : "Error");
   };
 
   const setEmailCorrect = (bool: boolean) => {
@@ -111,28 +120,31 @@ function CreatCardPage() {
   };
 
   const setPhoneCorrect = (bool: boolean) => {
-    setPhoneErr(bool ? "" : "Phone number is not Valid");
+    setPhoneErr(bool ? "" : "Phone number must be 9 digits");
     setfieldPhoneErr(bool ? false : true);
     setPhoneLabel(bool ? "Phone*" : "Error");
   };
 
-  const setDescriptionCorrect = (bool: boolean) => {
-    setDescriptionErr(bool ? "" : "Description must be atleat 10 chars");
-    setfieldDescriptionErr(bool ? false : true);
-    setDescriptionLabel(bool ? "Description*" : "Error");
+  const setPasswordCorrect = (bool: boolean, msg: string = "") => {
+    setPasswordErr(bool ? "" : msg);
+    setfieldPasswordErr(bool ? false : true);
+    setPasswordLabel(bool ? "Password*" : "Error");
   };
 
-  const setwebCorrect = (bool: boolean) => {
-    setwebLabel(bool ? "Confirm password*" : "");
-    setwebErr(bool ? "" : "The password are not the same!");
-    setfieldwebErr(bool ? false : true);
+  const setConfirmPasswordCorrect = (bool: boolean) => {
+    setConfirmPasswordLabel(bool ? "Confirm password*" : "");
+    setConfirmPasswordErr(bool ? "" : "The password are not the same!");
+    setfieldConfirmPasswordErr(bool ? false : true);
   };
 
   const validateButtonCheck = () => {
     EmailValidator.validate(email) ? setEmailCorrect(true) : setEmailCorrect(false);
-    description.length < 10 ? setDescriptionCorrect(false) : setDescriptionCorrect(true);
-    title.length < 2 ? setTitleCorrect(false) : setTitleCorrect(true);
-    subTitle.length < 2 ? setSubTitleCorrect(false) : setSubTitleCorrect(true);
+    password.length < 6 ? setPasswordCorrect(false, "Password must be atleat 6 chars") : setPasswordCorrect(true);
+    password !== confirmPassword || confirmPassword.length < 1
+      ? setConfirmPasswordCorrect(false)
+      : setConfirmPasswordCorrect(true);
+    name.length < 2 ? setNameCorrect(false) : setNameCorrect(true);
+    lastName.length < 2 ? setLastNameCorrect(false) : setLastNameCorrect(true);
     isValidIsraeliPhoneNumber(phone) ? setPhoneCorrect(true) : setPhoneCorrect(false);
     country.length < 1 ? setCountryCorrect(false) : setCountryCorrect(true);
     city.length < 1 ? setCityCorrect(false) : setCityCorrect(true);
@@ -140,23 +152,23 @@ function CreatCardPage() {
   };
 
   const clearAllFieldsFunc = () => {
-    setTitle("");
-    setSubTitle("");
+    setName("");
+    setLastName("");
     setEmail("");
-    setDescription("");
-    setweb("");
+    setPassword("");
+    setconfirmPassword("");
     setPhone("");
     setCity("");
     setStreet("");
     setImage("");
     setZip("");
     setHouseNumber("");
-    setTitleCorrect(true);
-    setSubTitleCorrect(true);
+    setNameCorrect(true);
+    setLastNameCorrect(true);
     setEmailCorrect(true);
     setPhoneCorrect(true);
-    setDescriptionCorrect(true);
-    setwebCorrect(true);
+    setPasswordCorrect(true);
+    setConfirmPasswordCorrect(true);
     setCountryCorrect(true);
     setCityCorrect(true);
     setStreetCorrect(true);
@@ -179,23 +191,31 @@ function CreatCardPage() {
     }
 
     if (!EmailValidator.validate(email)) {
+      console.log("im in email");
       setEmailCorrect(false);
       return false;
     }
     setEmailCorrect(true);
 
-    if (description.length <= 1) {
-      setDescriptionCorrect(true);
+    if (password.length <= 1) {
+      setPasswordCorrect(true);
+      return false;
+    }
+    if (!isValidPassword(password)) {
+      setPasswordCorrect(false, "password must contain !@%$#^&*-_* and one Capital letter");
       return false;
     }
 
-    if (!description || description.length < 10) {
-      setDescriptionCorrect(false);
+    if (!password || password.length < 6) {
+      setPasswordCorrect(false, "Password must be atleat 6 chars");
       return false;
     }
-    setDescriptionCorrect(true);
-
-    // setwebCorrect(true);
+    setPasswordCorrect(true);
+    if (password !== confirmPassword) {
+      setConfirmPasswordCorrect(false);
+      return false;
+    }
+    setConfirmPasswordCorrect(true);
 
     if (country.length < 1 || city.length < 1 || street.length < 1) {
       return false;
@@ -210,22 +230,23 @@ function CreatCardPage() {
       return;
     }
     console.log({
-      title,
-      subTitle,
-      description,
+      name,
+      lastName,
+      password,
       phone,
       email,
-      web,
+      confirmPassword,
       image,
       country,
       city,
       houseNumber,
       zip,
+      bizChecked,
     });
     setLoadCircle(true);
-    // setTimeout(() => {
-    //   navigate("/home");
-    // }, 2000);
+    setTimeout(() => {
+      navigate("/home");
+    }, 2000);
   };
 
   return (
@@ -233,6 +254,7 @@ function CreatCardPage() {
       sx={{
         display: "flex",
         justifyContent: "center",
+        // border: "solid 1px black",
       }}
     >
       <Box onKeyUp={() => validate()} component="form" sx={{ ...addSxStyle }}>
@@ -240,21 +262,21 @@ function CreatCardPage() {
         <Box display={"flex"} className="myBox">
           <TextField
             autoFocus={true}
-            label={titleLabel}
+            label={nameLabel}
             variant="outlined"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            error={fieldTitleErr}
-            helperText={titleErr}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            error={fieldNameErr}
+            helperText={nameErr}
           />
 
           <TextField
-            label={subTitleLabel}
+            label={lastNameLabel}
             variant="outlined"
-            value={subTitle}
-            onChange={(e) => setSubTitle(e.target.value)}
-            error={fieldSubTitleErr}
-            helperText={subTitleErr}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            error={fieldLastNameErr}
+            helperText={lastNameErr}
           />
         </Box>
 
@@ -279,21 +301,21 @@ function CreatCardPage() {
         </Box>
         <Box display={"flex"} className="myBox">
           <TextField
-            label={descriptionLabel}
+            label={passwordLabel}
             variant="outlined"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            error={fieldDescriptionErr}
-            helperText={descriptionErr}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={fieldPasswordErr}
+            helperText={passwordErr}
           />
 
           <TextField
-            label={webLabel}
+            label={confirmPasswordLabel}
             variant="outlined"
-            value={web}
-            onChange={(e) => setweb(e.target.value)}
-            error={fieldwebErr}
-            helperText={webErr}
+            value={confirmPassword}
+            onChange={(e) => setconfirmPassword(e.target.value)}
+            error={fieldconfirmPasswordErr}
+            helperText={confirmPasswordErr}
           />
         </Box>
         <Box display={"flex"} className="myBox">
@@ -301,7 +323,6 @@ function CreatCardPage() {
 
           <Autocomplete
             disablePortal
-            value={countrySelect}
             options={countryList}
             inputValue={country}
             onInputChange={(event, newInputValue) => {
@@ -318,19 +339,6 @@ function CreatCardPage() {
                 helperText={countryErr}
               />
             )}
-
-            // renderInput={(params) => (
-
-            //   <TextField
-            //     {...params}
-            //     label={countryLabel}
-            //     variant="outlined"
-            //     value={country}
-            //     // onChange={(e) => setCountry(e.target.value)}
-            //     error={fieldCountryErr}
-            //     helperText={countryErr}
-            //   />
-            // )}
           />
         </Box>
         <Box display={"flex"} className="myBox">
@@ -361,10 +369,10 @@ function CreatCardPage() {
           />
           <TextField label={"Zip"} variant="outlined" value={zip} onChange={(e) => setZip(e.target.value)} />
         </Box>
-        {/* <FormControlLabel
+        <FormControlLabel
           control={<Checkbox checked={bizChecked} onChange={handleCheckboxChange} />}
           label="Signup as Buisness"
-        /> */}
+        />
         <Box>
           <Button sx={{ width: "50%" }}>Cancel</Button>
           <Button
@@ -382,4 +390,4 @@ function CreatCardPage() {
   );
 }
 
-export default CreatCardPage;
+export default SignPage;

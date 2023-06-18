@@ -1,4 +1,4 @@
-import { Box, Skeleton, Stack } from "@mui/material";
+import { Skeleton, Stack } from "@mui/material";
 
 function CardSkeleton() {
   //   return <Skeleton sx={{ height: 370, width: 345 }} animation="wave" variant="rectangular" />;

@@ -1,0 +1,21 @@
+.mainPageWrap {
+  width: 90% !important;
+  margin-top: 5%;
+}
+/* Styles for screens up to 768px wide */
+@media screen and (max-width: 768px) {
+}
+
+/* Styles for screens between 768px and 992px wide */
+@media screen and (min-width: 768px) and (max-width: 992px) {
+  .mainPageWrap {
+    margin-left: 13% !important;
+  }
+}
+
+/* Styles for screens wider than 992px */
+@media screen and (min-width: 992px) {
+  .mainPageWrap {
+    margin-left: 8vw !important;
+  }
+}

@@ -5,7 +5,7 @@ import BuisnessCard from "../components/general/BuisnessCard";
 import CardSkeleton from "../components/general/CardSkeleton";
 import { Container } from "@mui/material";
 import Title from "../components/general/Title";
-
+import "./../PageStyles/homePage.css";
 function HomePage() {
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -18,7 +18,7 @@ function HomePage() {
   return (
     <>
       <Title mainText="Our Top Biz Cards" />
-      <Container sx={{ width: "80%", marginTop: "5%" }}>
+      <Container className="mainPageWrap">
         <Box>
           <Grid container spacing={3}>
             <Grid xs={11} sm={6} md={4}>

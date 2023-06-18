@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Button, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import Title from "../components/general/Title";
 import { toast } from "react-toastify";
 import * as EmailValidator from "email-validator";
@@ -54,7 +54,7 @@ function LoginPage() {
 
   const validateButtonCheck = () => {
     EmailValidator.validate(email) ? setEmailCorrect(true) : setEmailCorrect(false);
-    password.length < 6 ? setPasswordCorrect(false) : setPasswordCorrect(true);
+    // password.length < 6 ? setPasswordCorrect(false) : setPasswordCorrect(true);
   };
 
   const validate = (): boolean => {
@@ -70,16 +70,17 @@ function LoginPage() {
     }
     setEmailCorrect(true);
 
-    if (password.length <= 1) {
-      setPasswordCorrect(true);
-      return false;
-    }
+    // if (password.length <= 1) {
+    //   setPasswordCorrect(true);
+    //   return false;
+    // }
 
-    if (!password || password.length < 6) {
-      setPasswordCorrect(false);
-      return false;
-    }
-    setPasswordCorrect(true);
+    // if (!password || password.length < 6) {
+    //   console.log("wrong");
+    //   setPasswordCorrect(false);
+    //   return false;
+    // }
+    // setPasswordCorrect(true);
 
     return true;
   };
