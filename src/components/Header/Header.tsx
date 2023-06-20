@@ -28,6 +28,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { SearchContext } from "../../hooks/SearchContext";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -97,6 +98,12 @@ export default function Header() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const { searchValue, setSearchValue } = React.useContext(SearchContext);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+
   const drawer = (
     <div>
       {/* <Toolbar /> */}
@@ -115,16 +122,6 @@ export default function Header() {
         ))}
       </List>
       <Divider />
-      {/* <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{index % 2 === 0 ? <Icon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
     </div>
   );
 
@@ -201,7 +198,7 @@ export default function Header() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar sx={{ borderBottomLeftRadius: "35px", borderBottomRightRadius: "35px" }} position="static">
         <Toolbar>
           {!mdAndUp && (
             <IconButton
@@ -222,7 +219,13 @@ export default function Header() {
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
+            <StyledInputBase
+              onChange={handleSearchChange}
+              placeholder="Search…"
+              value={searchValue}
+              sx={{ width: "190px" }}
+              inputProps={{ "aria-label": "search" }}
+            />
           </Search>
           {mdAndUp ? (
             <>

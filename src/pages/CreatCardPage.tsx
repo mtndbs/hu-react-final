@@ -167,6 +167,7 @@ function CreatCardPage() {
       return false;
     }
     console.log(isValidIsraeliPhoneNumber(phone));
+
     if (!isValidIsraeliPhoneNumber(phone)) {
       setPhoneCorrect(false);
       return false;

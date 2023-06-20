@@ -8,6 +8,8 @@ import * as EmailValidator from "email-validator";
 import { useNavigate } from "react-router-dom";
 import Circle from "../components/general/Circle";
 import AuthButton from "../components/general/authButton";
+import { login } from "../services/ApiService";
+import { setToken } from "../auth/TokenManager";
 
 function LoginPage() {
   // generic
@@ -40,17 +42,17 @@ function LoginPage() {
       setfieldEmailErr(true);
     }
   };
-  const setPasswordCorrect = (bool: boolean) => {
-    if (bool) {
-      setPasswordLabel("Password");
-      setPasswordErr("");
-      setfieldPasswordErr(false);
-    } else {
-      setfieldPasswordErr(true);
-      setPasswordLabel("Error");
-      setPasswordErr("Password length must be atleat 6 chars");
-    }
-  };
+  // const setPasswordCorrect = (bool: boolean) => {
+  //   if (bool) {
+  //     setPasswordLabel("Password");
+  //     setPasswordErr("");
+  //     setfieldPasswordErr(false);
+  //   } else {
+  //     setfieldPasswordErr(true);
+  //     setPasswordLabel("Error");
+  //     setPasswordErr("Password length must be atleat 6 chars");
+  //   }
+  // };
 
   const validateButtonCheck = () => {
     EmailValidator.validate(email) ? setEmailCorrect(true) : setEmailCorrect(false);
@@ -91,11 +93,20 @@ function LoginPage() {
       validateButtonCheck();
       return;
     }
+    login({ email, password })
+      .then((user) => {
+        if (user.token) {
+          setToken(user.token);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     setLoadCircle(true);
     setTimeout(() => {
       navigate("/home");
+      // setLoadCircle(false);
     }, 2000);
-    console.log("valid");
   };
 
   return (

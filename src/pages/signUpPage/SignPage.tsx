@@ -15,6 +15,7 @@ import "../../App.css";
 
 import { isValidIsraeliPhoneNumber, isValidPassword } from "../../hooks/helpFunctions";
 import { countryList } from "./allCountries";
+import { signup } from "../../services/ApiService";
 function SignPage() {
   // generic
   const [loadCircle, setLoadCircle] = React.useState(false);
@@ -56,7 +57,7 @@ function SignPage() {
   // image useState
   const [image, setImage] = React.useState("");
   // country useState
-  const [countrySelect, setCountrySelect] = React.useState<string | null>();
+  // const [countrySelect, setCountrySelect] = React.useState<string | null>();
 
   const [country, setCountry] = React.useState("");
   const [countryLabel, setCountryLabel] = React.useState("Country *");
@@ -174,50 +175,55 @@ function SignPage() {
     setStreetCorrect(true);
   };
   const validate = (): boolean => {
+    // UI typing validation
+
+    !isValidIsraeliPhoneNumber(phone) ? setPhoneCorrect(false) : setPhoneCorrect(true);
+
+    !EmailValidator.validate(email) ? setEmailCorrect(false) : setEmailCorrect(true);
+
+    !isValidPassword(password) || password.length < 6
+      ? setPasswordCorrect(false, "Password must be atleat 6 chars, password must contain !@%$#^&*-_* and one Capital letter")
+      : setPasswordCorrect(true);
+
+    password !== confirmPassword ? setConfirmPasswordCorrect(false) : setConfirmPasswordCorrect(true);
+
+    // Reset empty required inputs from errors
     if (phone.length <= 1) {
       setPhoneCorrect(true);
-      return false;
     }
-    console.log(isValidIsraeliPhoneNumber(phone));
-    if (!isValidIsraeliPhoneNumber(phone)) {
-      setPhoneCorrect(false);
-      return false;
-    }
-    setPhoneCorrect(true);
-
     if (email.length <= 1) {
       setEmailCorrect(true);
-      return false;
     }
-
-    if (!EmailValidator.validate(email)) {
-      console.log("im in email");
-      setEmailCorrect(false);
-      return false;
-    }
-    setEmailCorrect(true);
-
     if (password.length <= 1) {
       setPasswordCorrect(true);
-      return false;
     }
-    if (!isValidPassword(password)) {
-      setPasswordCorrect(false, "password must contain !@%$#^&*-_* and one Capital letter");
-      return false;
+    if (country.length <= 1) {
+      setCountryCorrect(true);
     }
-
-    if (!password || password.length < 6) {
-      setPasswordCorrect(false, "Password must be atleat 6 chars");
-      return false;
+    if (name.length <= 1) {
+      setNameCorrect(true);
     }
-    setPasswordCorrect(true);
-    if (password !== confirmPassword) {
-      setConfirmPasswordCorrect(false);
-      return false;
+    if (lastName.length <= 1) {
+      setLastNameCorrect(true);
     }
-    setConfirmPasswordCorrect(true);
-
-    if (country.length < 1 || city.length < 1 || street.length < 1) {
+    if (city.length <= 1) {
+      setCityCorrect(true);
+    }
+    if (street.length <= 1) {
+      setStreetCorrect(true);
+    }
+    // Final validation
+    if (
+      country.length < 1 ||
+      city.length < 1 ||
+      street.length < 1 ||
+      !password ||
+      password.length < 6 ||
+      !isValidPassword(password) ||
+      password !== confirmPassword ||
+      !EmailValidator.validate(email) ||
+      !isValidIsraeliPhoneNumber(phone)
+    ) {
       return false;
     }
     return true;
@@ -229,6 +235,23 @@ function SignPage() {
       validateButtonCheck();
       return;
     }
+    signup({
+      name,
+      lastName,
+      password,
+      phone,
+      email,
+      confirmPassword,
+      image,
+      country,
+      city,
+      houseNumber,
+      zip,
+      bizChecked,
+    }).then((user) => {
+      console.log(user);
+      navigate("login");
+    });
     console.log({
       name,
       lastName,
@@ -245,7 +268,7 @@ function SignPage() {
     });
     setLoadCircle(true);
     setTimeout(() => {
-      navigate("/home");
+      navigate("/");
     }, 2000);
   };
 

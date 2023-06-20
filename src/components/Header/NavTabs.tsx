@@ -33,7 +33,8 @@ export default function NavTabs() {
         <Tabs indicatorColor="secondary" textColor="secondary" value={value} onChange={handleChange}>
           <Tab label="Home" to="/" sx={{ color: "white" }} component={Link} {...a11yProps(0)} />
           <Tab label="About" to="/about" sx={{ color: "white" }} component={Link} {...a11yProps(1)} />
-          <Tab label="My Favorite" to="/favorite-card" sx={{ color: "white" }} component={Link} {...a11yProps(2)} />
+          <Tab label="My Cards" to="/my-cards" sx={{ color: "white" }} component={Link} {...a11yProps(2)} />
+          <Tab label="My Favorite" to="/favorite-card" sx={{ color: "white" }} component={Link} {...a11yProps(3)} />
         </Tabs>
       </Box>
       <Box sx={{ display: { xs: "none", md: "flex" } }}>

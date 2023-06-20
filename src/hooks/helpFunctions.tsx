@@ -4,7 +4,7 @@ export const isValidPassword = (password: string) => {
 };
 
 export const isValidIsraeliPhoneNumber = (phoneNumber: string): boolean => {
-  const israeliNumberRegex = /^((((\+972)|0)(([234689]\d{7})|([57]\d{8}))|(1[5789]\d{8}))|\*\d{3,6})$/;
+  const israeliNumberRegex = /^((((\+972)|0)(([234689]\d{7 })|([57]\d{8}))|(1[5789]\d{8}))|\*\d{3,6})$/;
 
   return israeliNumberRegex.test(phoneNumber);
 };
