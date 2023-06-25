@@ -13,8 +13,24 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 // import "../signUpPage/signUp.css";
 import { isValidIsraeliPhoneNumber } from "../hooks/helpFunctions";
 import { countryList } from "../pages/signUpPage/allCountries";
+import { addCard } from "../services/ApiService";
+import { UserContext } from "../hooks/UserContext";
 
 function CreatCardPage() {
+  const { userData } = React.useContext(UserContext);
+
+  React.useEffect(() => {
+    setEmail(userData && userData.email ? userData.email : "");
+    setDescription("");
+    setweb("");
+    setPhone(userData && userData.phone ? userData.phone : "");
+    setCity(userData && userData.city ? userData.city : "");
+    setStreet(userData && userData.street ? userData.street : "");
+    setImage("");
+    setZip(userData && userData.zip ? userData.zip : "");
+    setHouseNumber(userData && userData.houseNumber ? userData.houseNumber : "");
+  }, [userData]);
+
   // generic
   const [loadCircle, setLoadCircle] = React.useState(false);
   const addSxStyle = sxStyles();
@@ -53,7 +69,7 @@ function CreatCardPage() {
   const [webErr, setwebErr] = React.useState("");
   const [fieldwebErr, setfieldwebErr] = React.useState(false);
   // image useState
-  const [image, setImage] = React.useState("");
+  let [image, setImage] = React.useState("");
   // country useState
   const [country, setCountry] = React.useState("");
   const [countrySelect, setCountrySelect] = React.useState<string | null>();
@@ -162,43 +178,48 @@ function CreatCardPage() {
     setStreetCorrect(true);
   };
   const validate = (): boolean => {
+    console.log("validateOn");
+    !isValidIsraeliPhoneNumber(phone) ? setPhoneCorrect(false) : setPhoneCorrect(true);
+
+    !EmailValidator.validate(email) ? setEmailCorrect(false) : setEmailCorrect(true);
+
+    // Reset empty required inputs from errors
     if (phone.length <= 1) {
       setPhoneCorrect(true);
-      return false;
     }
-    console.log(isValidIsraeliPhoneNumber(phone));
-
-    if (!isValidIsraeliPhoneNumber(phone)) {
-      setPhoneCorrect(false);
-      return false;
-    }
-    setPhoneCorrect(true);
-
     if (email.length <= 1) {
       setEmailCorrect(true);
-      return false;
     }
-
-    if (!EmailValidator.validate(email)) {
-      setEmailCorrect(false);
-      return false;
-    }
-    setEmailCorrect(true);
 
     if (description.length <= 1) {
       setDescriptionCorrect(true);
-      return false;
     }
 
-    if (!description || description.length < 10) {
-      setDescriptionCorrect(false);
-      return false;
+    if (country.length <= 1) {
+      setCountryCorrect(true);
     }
-    setDescriptionCorrect(true);
 
-    // setwebCorrect(true);
+    if (title.length <= 1) {
+      setTitleCorrect(true);
+    }
+    if (city.length <= 1) {
+      setCityCorrect(true);
+    }
+    if (street.length <= 1) {
+      setStreetCorrect(true);
+    }
+    // Final validation
 
-    if (country.length < 1 || city.length < 1 || street.length < 1) {
+    if (
+      country.length < 1 ||
+      city.length < 1 ||
+      street.length < 1 ||
+      !EmailValidator.validate(email) ||
+      !isValidIsraeliPhoneNumber(phone) ||
+      description.length < 10 ||
+      city.length < 1 ||
+      street.length < 1
+    ) {
       return false;
     }
     return true;
@@ -210,6 +231,12 @@ function CreatCardPage() {
       validateButtonCheck();
       return;
     }
+
+    if (image.length < 2) {
+      image = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
     console.log({
       title,
       subTitle,
@@ -222,11 +249,19 @@ function CreatCardPage() {
       city,
       houseNumber,
       zip,
+      street,
     });
     setLoadCircle(true);
-    // setTimeout(() => {
-    //   navigate("/home");
-    // }, 2000);
+
+    addCard({ title, subTitle, description, phone, email, web, image, country, city, street, houseNumber, zip })
+      .then(() => {
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   return (
@@ -237,7 +272,7 @@ function CreatCardPage() {
       }}
     >
       <Box onKeyUp={() => validate()} component="form" sx={{ ...addSxStyle }}>
-        <Title mainText={"Sign up"} subText="Plase sign up" />
+        <Title mainText={"Create Card"} subText="Create your new card" />
         <Box display={"flex"} className="myBox">
           <TextField
             autoFocus={true}

@@ -27,6 +27,9 @@ function LoginPage() {
   // password useStates
 
   const [password, setPassword] = React.useState("");
+  const [passwordLabel, setPasswordLabel] = React.useState("Password *");
+  const [passwordErr, setPasswordErr] = React.useState("");
+  const [fieldPasswordErr, setfieldPasswordErr] = React.useState(false);
 
   const setEmailCorrect = (bool: boolean) => {
     if (bool) {
@@ -38,6 +41,12 @@ function LoginPage() {
       setEmailErr("Email is not Valid");
       setfieldEmailErr(true);
     }
+  };
+
+  const setPasswordCorrect = (bool: boolean) => {
+    setPasswordErr(bool ? "" : "Password is not valid");
+    setfieldPasswordErr(bool ? false : true);
+    setPasswordLabel(bool ? "Password*" : "Error");
   };
 
   const validateButtonCheck = () => {
@@ -67,20 +76,28 @@ function LoginPage() {
       return;
     }
     login({ email, password })
-      .then((user) => {
-        setUser(user);
-        if (user.token) {
-          setToken(user.token);
+      .then((json) => {
+        if (json && json.status === "fail") {
+          setLoadCircle(false);
+          setPasswordCorrect(false);
+
+          setEmailCorrect(false);
+          toast.error(json.message);
+          return;
         }
+        if (json.token) {
+          setToken(json.token);
+          setUser(json);
+        }
+        setLoadCircle(true);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
       })
       .catch((error) => {
         console.log(error);
+        setLoadCircle(false);
       });
-    setLoadCircle(true);
-    setTimeout(() => {
-      navigate("/");
-      // setLoadCircle(false);
-    }, 2000);
   };
 
   return (
@@ -121,12 +138,12 @@ function LoginPage() {
         />
         <TextField
           id="outlined-basic"
-          label="Password"
+          label={passwordLabel}
           variant="outlined"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          // error={fieldPasswordErr}
-          // helperText={passwordErr}
+          error={fieldPasswordErr}
+          helperText={passwordErr}
         />
         <AuthButton handleClick={() => handleClick}>Submit {loadCircle && <Circle _size={30} />}</AuthButton>
       </Box>

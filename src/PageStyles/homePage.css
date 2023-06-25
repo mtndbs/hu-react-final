@@ -1,6 +1,28 @@
-.mainPageWrap {
+/* .mainPageWrap {
   width: 90% !important;
   margin-top: 5%;
+} */
+
+.card-hover {
+  filter: brightness(0.9);
+}
+.card-hover:hover {
+  transition: all 0.5s;
+  filter: contrast(1.2);
+  filter: brightness(1.1);
+}
+.card-hover .MuiCardMedia-img:hover {
+  transition: all 0.5s;
+  filter: contrast(1.2);
+  filter: brightness(1.1);
+  /* transform: scale(1.2) !important; */
+}
+
+.add-button {
+  display: inline-block;
+  transform: translateY(50vh) !important;
+  transform: translateX(70vw) !important;
+  position: fixed !important;
 }
 /* Styles for screens up to 768px wide */
 @media screen and (max-width: 768px) {
@@ -8,9 +30,9 @@
 
 /* Styles for screens between 768px and 992px wide */
 @media screen and (min-width: 768px) and (max-width: 992px) {
-  .mainPageWrap {
+  /* .mainPageWrap {
     margin-left: 13% !important;
-  }
+  } */
 }
 
 /* Styles for screens wider than 992px */

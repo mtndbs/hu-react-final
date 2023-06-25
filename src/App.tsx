@@ -12,29 +12,68 @@ import MyCardsPage from "./pages/MyCardsPage";
 import FavoriteCardPage from "./pages/FavoriteCardPage";
 import ViewCardPage from "./pages/ViewCardPage";
 // import PrimarySearchAppBar from "./components/Header/Header";
-import { Box } from "@mui/material";
+import { Container } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { verifyToken } from "./auth/TokenManager";
+import RouteGuard from "./auth/RouteGuard";
 function App() {
   return (
     <>
+      {/* {verifyToken() && <Header />} */}
       <Header />
-      <ToastContainer position="top-right" theme="dark" />
-      <div className="master-wrap">
-        <Box className="">
+      <ToastContainer position="top-right" theme="light" />
+      <Container fixed sx={{ margin: "10px auto" }}>
+        <Container sx={{ margin: "60px auto" }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/sign" element={<SignPage />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/create-card" element={<CreatCardPage />} />
-            <Route path="/my-cards" element={<MyCardsPage />} />
-            <Route path="/favorite-card" element={<FavoriteCardPage />} />
-            <Route path="/edit-card/:id" element={<EditCardPage />} />
-            <Route path="/view-card/:id" element={<ViewCardPage />} />
+            <Route
+              path="/create-card"
+              element={
+                <RouteGuard>
+                  <CreatCardPage />
+                </RouteGuard>
+              }
+            />
+            <Route
+              path="/my-cards"
+              element={
+                <RouteGuard>
+                  <MyCardsPage />
+                </RouteGuard>
+              }
+            />
+            <Route
+              path="/favorite-card"
+              element={
+                <RouteGuard>
+                  <FavoriteCardPage />
+                </RouteGuard>
+              }
+            />
+            <Route
+              path="/edit-card/:id"
+              element={
+                <RouteGuard>
+                  <EditCardPage />
+                </RouteGuard>
+              }
+            />
+            <Route
+              path="/view-card/:id"
+              element={
+                <RouteGuard>
+                  <ViewCardPage />
+                </RouteGuard>
+              }
+            />
           </Routes>
-        </Box>
-      </div>
+        </Container>
+      </Container>
+      {/* </div> */}
       <Footer />
     </>
   );

@@ -1,0 +1,35 @@
+* {
+  /* border: solid black 1px; */
+}
+
+.left-box {
+  margin-right: 30px;
+  min-width: 235px !important;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+.view-main-wrap {
+  display: flex !important;
+  flex-direction: row !important;
+  width: 100% !important;
+  height: 70vh !important;
+}
+
+.avatar-wrap {
+  display: flex !important;
+  justify-content: center !important;
+}
+/* Styles for screens up to 768px wide */
+@media screen and (max-width: 768px) {
+  .view-main-wrap {
+    flex-direction: column !important;
+  }
+}
+
+/* Styles for screens between 768px and 992px wide */
+@media screen and (min-width: 768px) and (max-width: 992px) {
+}
+
+/* Styles for screens wider than 992px */
+@media screen and (min-width: 992px) {
+}

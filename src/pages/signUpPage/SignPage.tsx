@@ -235,29 +235,13 @@ function SignPage() {
       validateButtonCheck();
       return;
     }
-    signup({
-      name,
-      lastName,
-      password,
-      phone,
-      email,
-      confirmPassword,
-      image,
-      country,
-      city,
-      houseNumber,
-      zip,
-      bizChecked,
-    }).then((user) => {
-      console.log(user);
-      navigate("login");
-    });
     console.log({
       name,
       lastName,
       password,
       phone,
       email,
+      street,
       confirmPassword,
       image,
       country,
@@ -266,10 +250,32 @@ function SignPage() {
       zip,
       bizChecked,
     });
-    setLoadCircle(true);
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+
+    signup({
+      name,
+      lastName,
+      password,
+      phone,
+      email,
+      street,
+      confirmPassword,
+      image,
+      country,
+      city,
+      houseNumber,
+      zip,
+      bizChecked,
+    })
+      .then((user) => {
+        console.log(user);
+        setLoadCircle(true);
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

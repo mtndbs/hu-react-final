@@ -5,8 +5,23 @@ const serverUrl = "http://localhost:7800/api/";
 const cardsUrl = `${serverUrl}cards/`;
 const usersUrl = `${serverUrl}users/`;
 
-export async function getCards(): Promise<Array<Bcard>> {
-  const res = await fetch(`${cardsUrl}`);
+export async function getCards(): Promise<any | Bcard[]> {
+  const res = await fetch(`${cardsUrl}`, {
+    headers: {
+      authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  return res.json();
+}
+
+export async function getUserCards(): Promise<Array<Bcard>> {
+  const res = await fetch(`${cardsUrl}my`, {
+    headers: {
+      authorization: `Bearer ${getToken()}`,
+    },
+  });
+
   return res.json();
 }
 
@@ -65,7 +80,8 @@ export async function toggleFavoriteCard(cardId: string): Promise<Bcard> {
   return res.json();
 }
 
-export async function getUserFavoriteCard(): Promise<Bcard> {
+// export async function getUserFavoriteCard(): Promise<Array<Bcard>> {
+export async function getUserFavoriteCard(): Promise<any> {
   const res = await fetch(`${cardsUrl}getUserFavoriteCards`, {
     method: "GET",
     headers: {

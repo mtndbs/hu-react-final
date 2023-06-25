@@ -1,8 +1,27 @@
-const tokenKey = "token";
+import { User } from "../services/Interfaces";
 
+const tokenKey = "token";
+const userKey = "user";
 export function setToken(tokenValue?: string) {
   if (!tokenValue) return;
   localStorage.setItem(tokenKey, tokenValue);
+}
+
+export function setUser(user: User) {
+  if (!user) return;
+  const stringfyUser = JSON.stringify(user);
+  localStorage.setItem(userKey, stringfyUser);
+}
+
+export function getUser(): User | undefined {
+  const user = localStorage.getItem(userKey);
+  if (!user) return;
+  const parsedUser = JSON.parse(user);
+  return parsedUser;
+}
+
+export function removeUser() {
+  localStorage.removeItem(userKey);
 }
 
 export function getToken(): string {

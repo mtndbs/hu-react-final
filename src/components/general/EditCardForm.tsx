@@ -13,26 +13,11 @@ function EditCardForm() {
       autoComplete="off"
     >
       <div>
-        <TextField
-          required
-          id="outlined-required"
-          label="Required"
-          defaultValue="Hello World"
-        />
-        <TextField
-          disabled
-          id="outlined-disabled"
-          label="Disabled"
-          defaultValue="Hello World"
-        />
+        <TextField required id="outlined-required" label="Required" defaultValue="Hello World" />
+        <TextField disabled id="outlined-disabled" label="Disabled" defaultValue="Hello World" />
       </div>
       <div>
-        <TextField
-          id="outlined-password-input"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-        />
+        <TextField id="outlined-password-input" label="Password" type="password" autoComplete="current-password" />
         <TextField
           id="outlined-read-only-input"
           label="Read Only"
@@ -52,12 +37,7 @@ function EditCardForm() {
           }}
         />
         <TextField id="outlined-search" label="Search field" type="search" />
-        <TextField
-          id="outlined-helperText"
-          label="Helper text"
-          defaultValue="Default Value"
-          helperText="Some important text"
-        />
+        <TextField id="outlined-helperText" label="Helper text" defaultValue="Default Value" helperText="Some important text" />
       </div>
     </Box>
   );

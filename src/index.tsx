@@ -6,15 +6,18 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { AppThemeProvider } from "./plugins/mui";
 import { SearchProvider } from "./hooks/SearchContext";
+import { UserProvider } from "./hooks/UserContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
     <AppThemeProvider>
       <BrowserRouter>
-        <SearchProvider>
-          <App />
-        </SearchProvider>
+        <UserProvider>
+          <SearchProvider>
+            <App />
+          </SearchProvider>
+        </UserProvider>
       </BrowserRouter>
     </AppThemeProvider>
   </React.StrictMode>

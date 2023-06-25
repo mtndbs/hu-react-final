@@ -1,4 +1,5 @@
 export interface Bcard {
+  status?: any;
   _id?: string | null;
   title?: string | null;
   subTitle?: string | null;
@@ -11,10 +12,17 @@ export interface Bcard {
   city?: string | null;
   houseNumber?: string | null;
   zip?: string | null;
-  favorite?: [] | null;
+  street?: string | null;
+  favorites?: [] | null;
+  favoriteCards?: any;
+  longitude?: number;
+  latitude?: number;
+  createdAt?: Date | null;
+  message?: any;
 }
 
 export interface User {
+  _id?: string | null;
   name?: string | null;
   lastName?: string | null;
   password?: string | null;
@@ -26,7 +34,11 @@ export interface User {
   city?: string | null;
   houseNumber?: string | null;
   zip?: string | null;
-  bizChecked?: boolean | null;
+  bizChecked?: boolean | null; // from sign form
   token?: string | undefined;
-  biz?: boolean | null;
+  biz?: boolean; // from token
+  street?: string | null;
+  favorites?: [string] | null;
+  status?: any;
+  message?: string;
 }

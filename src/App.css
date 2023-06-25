@@ -12,9 +12,7 @@
 .master-wrap {
   /* margin: 15px;
   padding: 20px; */
-  display: flex !important;
-  justify-content: center !important;
-  justify-items: center !important;
+  margin-bottom: 350px !important;
 }
 
 /* Styles for screens up to 768px wide */
@@ -28,6 +26,7 @@
 
   .master-wrap {
     margin-left: 24px;
+    margin-bottom: 350px !important;
   }
 }
 
