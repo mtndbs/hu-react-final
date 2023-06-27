@@ -1,3 +1,7 @@
+export interface role {
+  role: "user" | "admin";
+}
+
 export interface Bcard {
   status?: any;
   _id?: string | null;
@@ -37,6 +41,8 @@ export interface User {
   bizChecked?: boolean | null; // from sign form
   token?: string | undefined;
   biz?: boolean; // from token
+  // role?: role | null;
+  role?: any;
   street?: string | null;
   favorites?: [string] | null;
   status?: any;

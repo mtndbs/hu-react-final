@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Container } from "@mui/material";
+import { Container, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
 import Title from "../components/general/Title";
 import { toast } from "react-toastify";
 import * as EmailValidator from "email-validator";
@@ -10,9 +10,20 @@ import Circle from "../components/general/Circle";
 import AuthButton from "../components/general/authButton";
 import { login } from "../services/ApiService";
 import { setToken, setUser } from "../auth/TokenManager";
+import { UserContext } from "../hooks/UserContext";
+import { VisibilityOff, Visibility } from "@mui/icons-material";
 
 function LoginPage() {
   // generic
+  const { setUserData } = React.useContext(UserContext);
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
 
   const [loadCircle, setLoadCircle] = React.useState(false);
   const navigate = useNavigate();
@@ -80,7 +91,6 @@ function LoginPage() {
         if (json && json.status === "fail") {
           setLoadCircle(false);
           setPasswordCorrect(false);
-
           setEmailCorrect(false);
           toast.error(json.message);
           return;
@@ -88,6 +98,7 @@ function LoginPage() {
         if (json.token) {
           setToken(json.token);
           setUser(json);
+          setUserData(json);
         }
         setLoadCircle(true);
         setTimeout(() => {
@@ -126,7 +137,7 @@ function LoginPage() {
         <Title mainText={"Login"} subText="please login" />
 
         <TextField
-          fullWidth={true}
+          sx={{ m: 1, width: "70ch" }}
           autoFocus={true}
           id="outlined-basic"
           label={emailLabel}
@@ -136,7 +147,8 @@ function LoginPage() {
           error={fieldEmailErr}
           helperText={emailErr}
         />
-        <TextField
+
+        {/* <TextField
           id="outlined-basic"
           label={passwordLabel}
           variant="outlined"
@@ -144,7 +156,32 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           error={fieldPasswordErr}
           helperText={passwordErr}
-        />
+        /> */}
+        <FormControl sx={{ m: 1, width: "70ch" }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">{passwordLabel}</InputLabel>
+          <OutlinedInput
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            error={fieldPasswordErr}
+            id="outlined-adornment-password"
+            type={showPassword ? "text" : "password"}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label={passwordLabel}
+          />
+        </FormControl>
+        <FormHelperText id="outlined-weight-helper-text">{passwordErr}</FormHelperText>
+
         <AuthButton handleClick={() => handleClick}>Submit {loadCircle && <Circle _size={30} />}</AuthButton>
       </Box>
     </Container>

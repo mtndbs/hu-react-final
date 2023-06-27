@@ -1,7 +1,7 @@
 import { Avatar, Box, Container, Typography } from "@mui/material";
 import { palette } from "../plugins/mui";
 import "./../PageStyles/viewCardPage.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 // import { useEffect } from "react";
 import { getCardById } from "../services/ApiService";
 import React from "react";
@@ -11,7 +11,6 @@ import { Bcard } from "../services/Interfaces";
 
 function ViewCardPage() {
   const [Buisness, setBuisness] = React.useState<Bcard>({});
-  const navigate = useNavigate();
   const { id } = useParams();
 
   React.useEffect(() => {
@@ -32,7 +31,12 @@ function ViewCardPage() {
   return (
     <Container sx={{ display: "flex", flexDirection: "column", marginTop: "100px" }}>
       <Container className="view-main-wrap">
-        <Box className="left-box" sx={{ backgroundColor: palette.secondary.main }}>
+        <Box
+          className="left-box"
+          sx={{
+            backgroundColor: palette.secondary.main,
+          }}
+        >
           <Box className="avatar-wrap">
             <Avatar
               alt=""

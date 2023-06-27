@@ -13,68 +13,75 @@ import FavoriteCardPage from "./pages/FavoriteCardPage";
 import ViewCardPage from "./pages/ViewCardPage";
 // import PrimarySearchAppBar from "./components/Header/Header";
 import { Container } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { verifyToken } from "./auth/TokenManager";
+// import { verifyToken } from "./auth/TokenManager";
 import RouteGuard from "./auth/RouteGuard";
+import React from "react";
+import AppThemeProvider from "./plugins/mui";
+
 function App() {
+  const [mode, setMode] = React.useState<"light" | "dark">("light");
+
+  function themeToggle() {
+    const toggleMode = mode === "dark" ? "light" : "dark";
+    setMode(toggleMode);
+  }
+
   return (
     <>
-      {/* {verifyToken() && <Header />} */}
-      <Header />
-      <ToastContainer position="top-right" theme="light" />
-      <Container fixed sx={{ margin: "10px auto" }}>
-        <Container sx={{ margin: "60px auto" }}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/sign" element={<SignPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route
-              path="/create-card"
-              element={
-                <RouteGuard>
-                  <CreatCardPage />
-                </RouteGuard>
-              }
-            />
-            <Route
-              path="/my-cards"
-              element={
-                <RouteGuard>
-                  <MyCardsPage />
-                </RouteGuard>
-              }
-            />
-            <Route
-              path="/favorite-card"
-              element={
-                <RouteGuard>
-                  <FavoriteCardPage />
-                </RouteGuard>
-              }
-            />
-            <Route
-              path="/edit-card/:id"
-              element={
-                <RouteGuard>
-                  <EditCardPage />
-                </RouteGuard>
-              }
-            />
-            <Route
-              path="/view-card/:id"
-              element={
-                <RouteGuard>
-                  <ViewCardPage />
-                </RouteGuard>
-              }
-            />
-          </Routes>
+      <AppThemeProvider mode={mode}>
+        <CssBaseline />
+        <Header themeToggle={themeToggle} />
+        <ToastContainer position="top-right" theme="light" />
+        <Container fixed sx={{ margin: "10px auto" }}>
+          <Container sx={{ margin: "60px auto" }}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/sign" element={<SignPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/view-card/:id" element={<ViewCardPage />} />
+              <Route
+                path="/create-card"
+                element={
+                  <RouteGuard>
+                    <CreatCardPage />
+                  </RouteGuard>
+                }
+              />
+              <Route
+                path="/my-cards"
+                element={
+                  <RouteGuard>
+                    <MyCardsPage />
+                  </RouteGuard>
+                }
+              />
+              <Route
+                path="/favorite-card"
+                element={
+                  <RouteGuard>
+                    <FavoriteCardPage />
+                  </RouteGuard>
+                }
+              />
+              <Route
+                path="/edit-card/:id"
+                element={
+                  <RouteGuard>
+                    <EditCardPage />
+                  </RouteGuard>
+                }
+              />
+            </Routes>
+          </Container>
         </Container>
-      </Container>
-      {/* </div> */}
-      <Footer />
+        {/* </div> */}
+        <Footer />
+      </AppThemeProvider>
     </>
   );
 }

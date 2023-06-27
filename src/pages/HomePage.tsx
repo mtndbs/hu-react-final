@@ -30,6 +30,7 @@ function HomePage() {
 
   React.useEffect(() => {
     const getData = async () => {
+      console.log(userData);
       getCards()
         .then((json) => {
           // if (json.status.toLowerCase() === "fail") {
@@ -44,7 +45,7 @@ function HomePage() {
         });
     };
     getData();
-  }, []);
+  }, [userData]);
 
   React.useEffect(() => {
     const filtered = cards.filter(
@@ -78,35 +79,29 @@ function HomePage() {
 
   return (
     <>
+      <h1>{userData ? userData.role : "unknown"}</h1>
       <Title mainText="Our Top Biz Cards" />
-      {/* {userData ? userData.email : "blabla@gmail.com"} */}
       <Container>
         <Box>
           <Grid container spacing={2}>
-            {cards.length < 1 && (
+            {/* {cards.length < 1 && (
               <Alert variant="filled" severity="warning">
                 There are no avialble cards {errMsg}
               </Alert>
-            )}
+            )} */}
             {filteredData.map((card, index) => (
               <Grid item xs={11} sm={6} md={4} key={card._id}>
                 {loading ? (
                   <CardSkeleton />
                 ) : (
-                  <div
-                    onClick={() => {
-                      console.log("hello");
-                    }}
-                  >
-                    <BuisnessCard
-                      key={card._id}
-                      {...card}
-                      onDelete={onDelete}
-                      onToggleFavorit={onToggleFavorit}
-                      favoritePage={false}
-                      index={index}
-                    />
-                  </div>
+                  <BuisnessCard
+                    key={card._id}
+                    {...card}
+                    onDelete={onDelete}
+                    onToggleFavorit={onToggleFavorit}
+                    favoritePage={false}
+                    index={index}
+                  />
                 )}
               </Grid>
             ))}

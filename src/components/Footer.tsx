@@ -1,15 +1,14 @@
 import * as React from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import FolderIcon from "@mui/icons-material/Folder";
-import RestoreIcon from "@mui/icons-material/Restore";
+import PortraitIcon from "@mui/icons-material/Portrait";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import AddCardIcon from "@mui/icons-material/AddCard";
 import { Fab, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { UserContext } from "../hooks/UserContext";
-
+import InfoIcon from "@mui/icons-material/Info";
+import { verifyAdmin } from "../auth/TokenManager";
 export default function LabelBottomNavigation() {
   const [value, setValue] = React.useState("recents");
   const navigate = useNavigate();
@@ -21,17 +20,20 @@ export default function LabelBottomNavigation() {
 
   return (
     <>
-      <Fab
-        color="primary"
-        sx={{ position: "fixed", bottom: "10vh", left: "80%", width: "70px", height: "70px" }}
-        size="large"
-        aria-label="add"
-        onClick={() => {
-          navigate("/create-card");
-        }}
-      >
-        <AddIcon />
-      </Fab>
+      {userData?.bizChecked ||
+        (verifyAdmin(userData!) && (
+          <Fab
+            color="primary"
+            sx={{ position: "fixed", bottom: "10vh", left: "80%", width: "70px", height: "70px" }}
+            size="large"
+            aria-label="add"
+            onClick={() => {
+              navigate("/create-card");
+            }}
+          >
+            <AddIcon />
+          </Fab>
+        ))}
       <Paper
         sx={{
           position: "fixed",
@@ -44,27 +46,36 @@ export default function LabelBottomNavigation() {
         elevation={3}
       >
         <BottomNavigation sx={{ width: 500 }} value={value} onChange={handleChange}>
-          <BottomNavigationAction label="Recents" value="recents" icon={<RestoreIcon />} />
-
           <BottomNavigationAction
-            label="Favorites"
-            value="favorites"
+            label="About"
+            value="About"
             onClick={() => {
-              navigate("/favorite-card");
+              navigate("/about");
             }}
-            icon={<FavoriteIcon />}
+            icon={<InfoIcon />}
           />
-          {userData?.biz && (
-            <BottomNavigationAction
-              label="Add new Card"
-              onClick={() => {
-                navigate("/my-cards");
-              }}
-              value="Add new Card"
-              icon={<AddCardIcon />}
-            />
-          )}
-          <BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon />} />
+          {userData?.bizChecked ||
+            (verifyAdmin(userData!) && (
+              <BottomNavigationAction
+                label="Favorites"
+                value="favorites"
+                onClick={() => {
+                  navigate("/favorite-card");
+                }}
+                icon={<FavoriteIcon />}
+              />
+            ))}
+          {userData?.bizChecked ||
+            (verifyAdmin(userData!) && (
+              <BottomNavigationAction
+                label="Add new Card"
+                onClick={() => {
+                  navigate("/my-cards");
+                }}
+                value="Add new Card"
+                icon={<PortraitIcon />}
+              />
+            ))}
         </BottomNavigation>
       </Paper>
     </>

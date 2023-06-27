@@ -4,22 +4,22 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import { AppThemeProvider } from "./plugins/mui";
 import { SearchProvider } from "./hooks/SearchContext";
 import { UserProvider } from "./hooks/UserContext";
+import { Box } from "@mui/material";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
-    <AppThemeProvider>
-      <BrowserRouter>
-        <UserProvider>
-          <SearchProvider>
+    <BrowserRouter>
+      <UserProvider>
+        <SearchProvider>
+          <Box>
             <App />
-          </SearchProvider>
-        </UserProvider>
-      </BrowserRouter>
-    </AppThemeProvider>
+          </Box>
+        </SearchProvider>
+      </UserProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

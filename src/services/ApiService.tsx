@@ -7,9 +7,9 @@ const usersUrl = `${serverUrl}users/`;
 
 export async function getCards(): Promise<any | Bcard[]> {
   const res = await fetch(`${cardsUrl}`, {
-    headers: {
-      authorization: `Bearer ${getToken()}`,
-    },
+    // headers: {
+    //   authorization: `Bearer ${getToken()}`,
+    // },
   });
 
   return res.json();

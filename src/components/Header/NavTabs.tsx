@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Link, useNavigate } from "react-router-dom";
 import { Container } from "@mui/material";
-import { removeToken, removeUser, verifyToken } from "./../../auth/TokenManager";
+import { removeToken, removeUser, verifyToken, verifyAdmin } from "./../../auth/TokenManager";
 import { UserContext } from "../../hooks/UserContext";
 
 function a11yProps(index: number) {
@@ -37,8 +37,15 @@ export default function NavTabs() {
         <Tabs indicatorColor="secondary" textColor="secondary" value={value} onChange={handleChange}>
           <Tab label="Home" to="/" sx={{ color: "white" }} component={Link} {...a11yProps(0)} />
           <Tab label="About" to="/about" sx={{ color: "white" }} component={Link} {...a11yProps(1)} />
-          {userData?.biz && <Tab label="My Cards" to="/my-cards" sx={{ color: "white" }} component={Link} {...a11yProps(2)} />}
-          <Tab label="My Favorite" to="/favorite-card" sx={{ color: "white" }} component={Link} {...a11yProps(3)} />
+
+          {userData?.bizChecked ||
+            (verifyAdmin(userData!) && (
+              <Tab label="My Cards" to="/my-cards" sx={{ color: "white" }} component={Link} {...a11yProps(2)} />
+            ))}
+
+          {verifyToken() && (
+            <Tab label="My Favorite" to="/favorite-card" sx={{ color: "white" }} component={Link} {...a11yProps(3)} />
+          )}
         </Tabs>
       </Box>
       <Box sx={{ display: { xs: "none", md: "flex" } }}>

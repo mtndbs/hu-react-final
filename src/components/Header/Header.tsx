@@ -15,6 +15,8 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
 import NavTabs from "./NavTabs";
 import {
   Divider,
@@ -29,6 +31,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { SearchContext } from "../../hooks/SearchContext";
+import AppTitle from "../AppTitle";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -70,7 +73,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Header() {
+interface Props {
+  themeToggle: any;
+}
+
+export default function Header({ themeToggle }: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
   // const [drawerOpen, setDrawerOpen] = useState(false);
@@ -108,11 +115,11 @@ export default function Header() {
     <div>
       {/* <Toolbar /> */}
       <Typography variant="h2" margin={1}>
-        Buisness
+        <AppTitle />
       </Typography>
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+        {["Home", "About", "My Cards", "My Favorite"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>{index % 2 === 0 ? <Icon /> : <MailIcon />}</ListItemIcon>
@@ -212,8 +219,8 @@ export default function Header() {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography variant="h3" noWrap component="div" sx={{ display: { xs: "none", sm: "block" }, width: "160px" }}>
-            Buisness
+          <Typography variant="h3" noWrap component="div" sx={{ display: { xs: "none", sm: "block" }, minWidth: "120px" }}>
+            BuisCase
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -250,6 +257,14 @@ export default function Header() {
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <IconButton
+              sx={{ color: "white" }}
+              onClick={() => {
+                themeToggle();
+              }}
+            >
+              {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
                 <MailIcon />
@@ -286,6 +301,7 @@ export default function Header() {
           </Box>
         </Toolbar>
       </AppBar>
+
       {renderMobileMenu}
       {renderMenu}
     </Box>

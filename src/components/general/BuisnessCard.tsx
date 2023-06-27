@@ -23,13 +23,15 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
-import { getUser, verifyToken } from "../../auth/TokenManager";
+import { getUser, verifyAdmin, verifyToken } from "../../auth/TokenManager";
 import "./../../PageStyles/homePage.css";
 import { palette } from "./../../plugins/mui";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
+import { UserContext } from "../../hooks/UserContext";
 
 interface Props extends Bcard {
+  user_id?: string;
   onDelete: Function;
   onToggleFavorit: Function;
   favoritePage: boolean;
@@ -38,26 +40,22 @@ interface Props extends Bcard {
 
 function BuisnessCard({
   _id,
+  user_id,
   title,
   subTitle,
-  description,
   phone,
-  email,
-  web,
   image,
-  country,
-  city,
-  houseNumber,
-  zip,
   onDelete,
   onToggleFavorit,
   favoritePage,
-  index,
   favorites,
 }: Props) {
+  const { userData } = React.useContext(UserContext);
   const [open, setOpen] = React.useState(false);
+  const [isRedHeart, setIsRedHeart] = React.useState(false);
   const navigate = useNavigate();
 
+  // General functions
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -70,11 +68,20 @@ function BuisnessCard({
     window.location.href = `tel:${phoneNumber}`;
   };
 
-  const [isRedHeart, setIsRedHeart] = React.useState(false);
+  const ifCardBelongToThisUserFunc = (userId: string | null | undefined) => {
+    if (userId === undefined) return false;
 
+    if (userId === user_id) {
+      return true;
+    }
+    return false;
+  };
   const toggleHighlight = () => {
     setIsRedHeart(!isRedHeart);
   };
+
+  // useEffect
+
   React.useEffect(() => {
     const ifCardIsFavorite = (userId: string | null | undefined) => {
       favorites?.forEach((id) => {
@@ -85,7 +92,6 @@ function BuisnessCard({
     };
     const userObject = getUser();
     if (userObject) {
-      // console.log(userObject);
       ifCardIsFavorite(userObject._id);
     }
   }, [favorites]);
@@ -96,7 +102,7 @@ function BuisnessCard({
         sx={{
           maxWidth: 300,
           minWidth: 300,
-          minHeight: 394,
+          minHeight: 430,
           margin: "10px",
           borderTopLeftRadius: "15px",
           borderTopRightRadius: "15px",
@@ -106,12 +112,16 @@ function BuisnessCard({
       >
         <CardHeader
           avatar={
-            <Avatar sx={{ backgroundColor: palette.secondary.main }} aria-label="recipe">
+            <Avatar
+              sx={{
+                backgroundColor: palette.secondary.main,
+              }}
+              aria-label="recipe"
+            >
               {title ? title[0] : "U"}
             </Avatar>
           }
           title={title}
-          // subheader={subTitle}
         />
         <CardMedia
           component="img"
@@ -142,14 +152,7 @@ function BuisnessCard({
                 <FavoriteIcon sx={{ color: isRedHeart ? "red" : "" }} />
               </IconButton>
             )}
-            <IconButton
-              onClick={() => {
-                handleClickOpen();
-              }}
-              aria-label="delete"
-            >
-              <DeleteIcon />
-            </IconButton>
+
             <IconButton
               aria-label="call"
               onClick={() => {
@@ -158,14 +161,17 @@ function BuisnessCard({
             >
               <CallIcon />
             </IconButton>
-            <IconButton
-              aria-label="edit"
-              onClick={() => {
-                navigate(`edit-card/${_id}`);
-              }}
-            >
-              <ModeEditIcon />
-            </IconButton>
+            {verifyAdmin(userData!) ||
+              (ifCardBelongToThisUserFunc(userData?._id) && (
+                <IconButton
+                  aria-label="edit"
+                  onClick={() => {
+                    navigate(`edit-card/${_id}`);
+                  }}
+                >
+                  <ModeEditIcon />
+                </IconButton>
+              ))}
 
             <Box>
               <IconButton
@@ -175,6 +181,16 @@ function BuisnessCard({
               >
                 <PreviewIcon />
               </IconButton>
+              {verifyAdmin(userData!) && (
+                <IconButton
+                  onClick={() => {
+                    handleClickOpen();
+                  }}
+                  aria-label="delete"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
             </Box>
           </CardActions>
         )}
@@ -187,6 +203,7 @@ function BuisnessCard({
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
+          sx={{ borderRadius: "10px" }}
         >
           <DialogTitle id="alert-dialog-title">{"DELETE , deleting card from the database"}</DialogTitle>
           <DialogContent>

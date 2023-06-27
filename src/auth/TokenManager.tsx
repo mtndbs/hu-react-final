@@ -2,6 +2,7 @@ import { User } from "../services/Interfaces";
 
 const tokenKey = "token";
 const userKey = "user";
+
 export function setToken(tokenValue?: string) {
   if (!tokenValue) return;
   localStorage.setItem(tokenKey, tokenValue);
@@ -17,6 +18,7 @@ export function getUser(): User | undefined {
   const user = localStorage.getItem(userKey);
   if (!user) return;
   const parsedUser = JSON.parse(user);
+  console.log(parsedUser);
   return parsedUser;
 }
 
@@ -30,8 +32,16 @@ export function getToken(): string {
 
 export function removeToken() {
   localStorage.removeItem(tokenKey);
+  window.location.reload();
 }
 
 export function verifyToken(): boolean {
   return getToken().length > 0;
+}
+
+export function verifyAdmin(userData: User): boolean {
+  if (userData && userData.role === "admin") {
+    return true;
+  }
+  return false;
 }
