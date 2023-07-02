@@ -1,7 +1,16 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Container, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
+import {
+  Container,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  Typography,
+} from "@mui/material";
 import Title from "../components/general/Title";
 import { toast } from "react-toastify";
 import * as EmailValidator from "email-validator";
@@ -12,15 +21,17 @@ import { login } from "../services/ApiService";
 import { setToken, setUser } from "../auth/TokenManager";
 import { UserContext } from "../hooks/UserContext";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
+import PageCircle from "../components/general/PageCircle";
+import AppTitle from "../components/AppTitle";
 
 function LoginPage() {
   // generic
+  const [loading, setLoading] = React.useState(true);
+  const [loginMsg, setloginMsg] = React.useState("");
+
   const { setUserData } = React.useContext(UserContext);
-
   const [showPassword, setShowPassword] = React.useState(false);
-
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
@@ -41,6 +52,15 @@ function LoginPage() {
   const [passwordLabel, setPasswordLabel] = React.useState("Password *");
   const [passwordErr, setPasswordErr] = React.useState("");
   const [fieldPasswordErr, setfieldPasswordErr] = React.useState(false);
+
+  // useEffect
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1200);
+    return () => clearTimeout(timer);
+  });
 
   const setEmailCorrect = (bool: boolean) => {
     if (bool) {
@@ -65,7 +85,11 @@ function LoginPage() {
   };
 
   const validate = (): boolean => {
-    if (email.length <= 1) {
+    if (password.length < 1) {
+      setPasswordCorrect(true);
+    }
+
+    if (email.length < 1) {
       setEmailCorrect(true);
       return false;
     }
@@ -92,12 +116,13 @@ function LoginPage() {
           setLoadCircle(false);
           setPasswordCorrect(false);
           setEmailCorrect(false);
-          toast.error(json.message);
+          toast.error(json.message, { autoClose: false });
           return;
         }
         if (json.token) {
           setToken(json.token);
           setUser(json);
+          setloginMsg(`Welcome back ${json.name} ${json.lastName || ""} ! , logging in...`);
           setUserData(json);
         }
         setLoadCircle(true);
@@ -107,6 +132,9 @@ function LoginPage() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.message, { autoClose: false });
+        setPasswordCorrect(false);
+        setEmailCorrect(false);
         setLoadCircle(false);
       });
   };
@@ -118,72 +146,73 @@ function LoginPage() {
         justifyContent: "center",
       }}
     >
-      <Box
-        component="form"
-        onKeyUp={() => validate()}
-        autoComplete="off"
-        m={1}
-        sx={{
-          height: "50vh",
-          width: "40vw",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          "@media (max-width: 600px)": {
-            width: "90vw",
-          },
-        }}
-      >
-        <Title mainText={"Login"} subText="please login" />
+      {loading ? (
+        <PageCircle />
+      ) : (
+        <Box
+          component="form"
+          onKeyUp={() => validate()}
+          autoComplete="off"
+          m={1}
+          sx={{
+            height: "50vh",
+            width: "40vw",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            "@media (max-width: 600px)": {
+              width: "90vw",
+            },
+          }}
+        >
+          <Box textAlign={"center"}>
+            <AppTitle />
+          </Box>
+          <Title mainText={"Login"} subText="please login" />
 
-        <TextField
-          sx={{ m: 1, width: "70ch" }}
-          autoFocus={true}
-          id="outlined-basic"
-          label={emailLabel}
-          variant="outlined"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={fieldEmailErr}
-          helperText={emailErr}
-        />
-
-        {/* <TextField
-          id="outlined-basic"
-          label={passwordLabel}
-          variant="outlined"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={fieldPasswordErr}
-          helperText={passwordErr}
-        /> */}
-        <FormControl sx={{ m: 1, width: "70ch" }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">{passwordLabel}</InputLabel>
-          <OutlinedInput
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            error={fieldPasswordErr}
-            id="outlined-adornment-password"
-            type={showPassword ? "text" : "password"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label={passwordLabel}
+          <TextField
+            sx={{ m: 1 }}
+            autoFocus={true}
+            id="outlined-basic"
+            label={emailLabel}
+            variant="outlined"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={fieldEmailErr}
+            helperText={emailErr}
           />
-        </FormControl>
-        <FormHelperText id="outlined-weight-helper-text">{passwordErr}</FormHelperText>
 
-        <AuthButton handleClick={() => handleClick}>Submit {loadCircle && <Circle _size={30} />}</AuthButton>
-      </Box>
+          <FormControl sx={{ m: 1 }} variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">{passwordLabel}</InputLabel>
+            <OutlinedInput
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              error={fieldPasswordErr}
+              // id="outlined-adornment-password"
+              type={showPassword ? "text" : "password"}
+              label={passwordLabel}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+            <FormHelperText sx={{ color: "#d32f2f" }}>{passwordErr}</FormHelperText>
+          </FormControl>
+
+          <AuthButton handleClick={() => handleClick}>Submit {loadCircle && <Circle _size={30} />}</AuthButton>
+          <Typography variant="h6" color="green" height={"20px"} textAlign={"center"}>
+            {loginMsg}
+          </Typography>
+        </Box>
+      )}
     </Container>
   );
 }

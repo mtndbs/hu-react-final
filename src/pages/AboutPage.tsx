@@ -5,8 +5,8 @@ function AboutPage() {
   return (
     <>
       <Box marginTop={4}>
-        <Title mainText="About US" subText="Join us to our jurney"></Title>
-        <Box sx={{ maxWidth: "60vw", textAlign: "justify" }}>
+        <Title mainText="About BuisCase" subText="Join us to our jurney"></Title>
+        <Box sx={{ maxwidth: "60vw", textalign: "justify" }}>
           <Typography align="inherit" gutterBottom paragraph>
             Welcome to our application, where businesses thrive and advertising reaches new heights! We are proud to introduce a
             platform that revolutionizes the way businesses connect with their target audience. Our application is designed to

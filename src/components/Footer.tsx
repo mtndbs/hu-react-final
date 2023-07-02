@@ -9,6 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { UserContext } from "../hooks/UserContext";
 import InfoIcon from "@mui/icons-material/Info";
 import { verifyAdmin } from "../auth/TokenManager";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 export default function LabelBottomNavigation() {
   const [value, setValue] = React.useState("recents");
   const navigate = useNavigate();
@@ -20,20 +21,21 @@ export default function LabelBottomNavigation() {
 
   return (
     <>
-      {userData?.bizChecked ||
-        (verifyAdmin(userData!) && (
-          <Fab
-            color="primary"
-            sx={{ position: "fixed", bottom: "10vh", left: "80%", width: "70px", height: "70px" }}
-            size="large"
-            aria-label="add"
-            onClick={() => {
-              navigate("/create-card");
-            }}
-          >
-            <AddIcon />
-          </Fab>
-        ))}
+      {userData?.bizChecked || verifyAdmin(userData!) ? (
+        <Fab
+          color="primary"
+          sx={{ position: "fixed", bottom: "10vh", left: "80%", width: "70px", height: "70px" }}
+          size="large"
+          aria-label="add"
+          onClick={() => {
+            navigate("/create-card");
+          }}
+        >
+          <AddIcon />
+        </Fab>
+      ) : (
+        <span></span>
+      )}
       <Paper
         sx={{
           position: "fixed",
@@ -45,7 +47,16 @@ export default function LabelBottomNavigation() {
         }}
         elevation={3}
       >
-        <BottomNavigation sx={{ width: 500 }} value={value} onChange={handleChange}>
+        <BottomNavigation showLabels sx={{ width: 500 }} value={value} onChange={handleChange}>
+          <BottomNavigationAction
+            label="Back"
+            value="Back"
+            onClick={() => {
+              navigate(-1);
+            }}
+            icon={<ArrowBackIcon />}
+          />
+
           <BottomNavigationAction
             label="About"
             value="About"
@@ -54,28 +65,31 @@ export default function LabelBottomNavigation() {
             }}
             icon={<InfoIcon />}
           />
-          {userData?.bizChecked ||
-            (verifyAdmin(userData!) && (
-              <BottomNavigationAction
-                label="Favorites"
-                value="favorites"
-                onClick={() => {
-                  navigate("/favorite-card");
-                }}
-                icon={<FavoriteIcon />}
-              />
-            ))}
-          {userData?.bizChecked ||
-            (verifyAdmin(userData!) && (
-              <BottomNavigationAction
-                label="Add new Card"
-                onClick={() => {
-                  navigate("/my-cards");
-                }}
-                value="Add new Card"
-                icon={<PortraitIcon />}
-              />
-            ))}
+
+          {userData?.bizChecked || verifyAdmin(userData!) ? (
+            <BottomNavigationAction
+              label="Favorites"
+              value="favorites"
+              onClick={() => {
+                navigate("/favorite-card");
+              }}
+              icon={<FavoriteIcon />}
+            />
+          ) : (
+            <span></span>
+          )}
+          {userData?.bizChecked || verifyAdmin(userData!) ? (
+            <BottomNavigationAction
+              label="My cards!"
+              onClick={() => {
+                navigate("/my-cards");
+              }}
+              value="Add new Card"
+              icon={<PortraitIcon />}
+            />
+          ) : (
+            <span></span>
+          )}
         </BottomNavigation>
       </Paper>
     </>

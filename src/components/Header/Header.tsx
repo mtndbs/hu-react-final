@@ -13,26 +13,21 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
 import NavTabs from "./NavTabs";
-import {
-  Divider,
-  Drawer,
-  Icon,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Drawer, useMediaQuery, useTheme } from "@mui/material";
 import { SearchContext } from "../../hooks/SearchContext";
 import AppTitle from "../AppTitle";
-
+import DrawerTabs from "./DrawerTabs";
+import { removeToken, removeUser, verifyToken, verifyUiToken } from "../../auth/TokenManager";
+import "./../../App.css";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../hooks/UserContext";
+import { palette } from "../../plugins/mui";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -60,7 +55,6 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  // color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -85,6 +79,8 @@ export default function Header({ themeToggle }: Props) {
   const mdAndUp = useMediaQuery(theme.breakpoints.up("md"));
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const { userData } = React.useContext(UserContext);
+  const navigate = useNavigate();
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -111,26 +107,7 @@ export default function Header({ themeToggle }: Props) {
     setSearchValue(event.target.value);
   };
 
-  const drawer = (
-    <div>
-      {/* <Toolbar /> */}
-      <Typography variant="h2" margin={1}>
-        <AppTitle />
-      </Typography>
-      <Divider />
-      <List>
-        {["Home", "About", "My Cards", "My Favorite"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{index % 2 === 0 ? <Icon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-    </div>
-  );
+  const drawer = <DrawerTabs />;
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -149,8 +126,21 @@ export default function Header({ themeToggle }: Props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {verifyToken()
+        ? ["Profile", "My Account"].map((item) => (
+            <MenuItem key={item} onClick={handleMenuClose} component={Link} to={item} disabled={item === "My Account"}>
+              {item}
+            </MenuItem>
+          ))
+        : [
+            { link: "/sign", title: "Please SignUp" },
+            { link: "/login", title: "Have account ? Log!" },
+            { link: "/about", title: "About" },
+          ].map((item) => (
+            <MenuItem key={item.title} component={Link} to={item.link} onClick={handleMenuClose}>
+              {item.title}
+            </MenuItem>
+          ))}
     </Menu>
   );
 
@@ -171,23 +161,29 @@ export default function Header({ themeToggle }: Props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* Top right menu , with badges  */}
-      <MenuItem>
+      {/* Item I */}
+      <MenuItem
+        onClick={() => {
+          navigate("/login");
+        }}
+      >
         <IconButton size="large" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
+          <LoginIcon />
         </IconButton>
-        <p>Messages</p>
+        <p>Log-In</p>
       </MenuItem>
-      <MenuItem>
+      {/* Item II */}
+      <MenuItem
+        onClick={() => {
+          removeUser();
+        }}
+      >
         <IconButton size="large" color="inherit">
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
+          <LogoutIcon />
         </IconButton>
-        <p>Notifications</p>
+        <p>Log-Out</p>
       </MenuItem>
+      {/* Item III */}
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -220,7 +216,7 @@ export default function Header({ themeToggle }: Props) {
             </IconButton>
           )}
           <Typography variant="h3" noWrap component="div" sx={{ display: { xs: "none", sm: "block" }, minWidth: "120px" }}>
-            BuisCase
+            <AppTitle />
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -236,7 +232,7 @@ export default function Header({ themeToggle }: Props) {
           </Search>
           {mdAndUp ? (
             <>
-              <NavTabs></NavTabs>
+              <NavTabs />
             </>
           ) : (
             <>
@@ -270,25 +266,26 @@ export default function Header({ themeToggle }: Props) {
                 <MailIcon />
               </Badge>
             </IconButton>
-            <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+
             <IconButton
-              size="large"
-              edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              {!verifyUiToken(userData!) ? (
+                <Badge badgeContent={"Hi"} color="error">
+                  <AccountCircle className="user-icon" />
+                </Badge>
+              ) : (
+                <AccountCircle className="user-icon" sx={{ color: palette.special.main }} />
+              )}
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
+              edge={false}
               size="large"
               aria-label="show more"
               aria-controls={mobileMenuId}

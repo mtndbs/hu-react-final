@@ -4,8 +4,10 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Link, useNavigate } from "react-router-dom";
 import { Container } from "@mui/material";
-import { removeToken, removeUser, verifyToken, verifyAdmin } from "./../../auth/TokenManager";
+import { removeToken, removeUser, verifyToken, verifyAdmin, verifyUiToken } from "./../../auth/TokenManager";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { UserContext } from "../../hooks/UserContext";
+import { green } from "@mui/material/colors";
 
 function a11yProps(index: number) {
   return {
@@ -18,7 +20,7 @@ export default function NavTabs() {
   const [value, setValue] = React.useState(0);
   const navigate = useNavigate();
   const { userData } = React.useContext(UserContext);
-
+  console.log(userData);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -38,29 +40,36 @@ export default function NavTabs() {
           <Tab label="Home" to="/" sx={{ color: "white" }} component={Link} {...a11yProps(0)} />
           <Tab label="About" to="/about" sx={{ color: "white" }} component={Link} {...a11yProps(1)} />
 
-          {userData?.bizChecked ||
-            (verifyAdmin(userData!) && (
-              <Tab label="My Cards" to="/my-cards" sx={{ color: "white" }} component={Link} {...a11yProps(2)} />
-            ))}
+          {userData?.bizChecked || verifyAdmin(userData!) ? (
+            <Tab label="My Cards" to="/my-cards" sx={{ color: "white" }} component={Link} {...a11yProps(2)} />
+          ) : (
+            <span></span>
+          )}
 
-          {verifyToken() && (
+          {verifyUiToken(userData!) && (
             <Tab label="My Favorite" to="/favorite-card" sx={{ color: "white" }} component={Link} {...a11yProps(3)} />
           )}
         </Tabs>
       </Box>
       <Box sx={{ display: { xs: "none", md: "flex" } }}>
-        <Tab label="Login" to="/login" sx={{ color: "white" }} component={Link} {...a11yProps(0)} />
-        <Tab label="SignUp" to="/sign" sx={{ color: "white" }} component={Link} {...a11yProps(0)} />
+        {verifyAdmin(userData!) && (
+          <Tab
+            label="Admin"
+            to="/sandbox"
+            sx={{ color: "white", opacity: 1 }}
+            icon={<AdminPanelSettingsIcon />}
+            component={Link}
+            {...a11yProps(3)}
+          />
+        )}
+        <Tab label="SignUp" to="/sign" sx={{ opacity: 1, color: !verifyToken() ? green[200] : "white" }} component={Link} />
+        {!userData?.role && <Tab label="Login" to="/login" sx={{ opacity: 1 }} component={Link} />}
         {verifyToken() && (
           <Tab
             label="LOG OUT"
             sx={{ color: "white" }}
             onClick={() => {
-              removeToken();
               removeUser();
-              setTimeout(() => {
-                navigate("login");
-              });
             }}
             {...a11yProps(0)}
           />

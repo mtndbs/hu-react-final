@@ -34,6 +34,7 @@ export interface User {
   email?: string | null;
   confirmPassword?: string | null;
   image?: string | null;
+  imageAlt?: string | null;
   country?: string | null;
   city?: string | null;
   houseNumber?: string | null;

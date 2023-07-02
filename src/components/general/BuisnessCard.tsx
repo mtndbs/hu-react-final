@@ -24,7 +24,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 import { getUser, verifyAdmin, verifyToken } from "../../auth/TokenManager";
-import "./../../PageStyles/homePage.css";
 import { palette } from "./../../plugins/mui";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
@@ -107,6 +106,11 @@ function BuisnessCard({
           borderTopLeftRadius: "15px",
           borderTopRightRadius: "15px",
           boxShadow: " 0px 8px 16px 0px rgba(0,0,0,0.5)",
+          "@media (max-width: 700px)": {
+            maxwidth: 250,
+            minwidth: 250,
+            minheight: 360,
+          },
         }}
         className="card-hover"
       >

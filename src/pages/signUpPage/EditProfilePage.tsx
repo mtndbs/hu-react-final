@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Autocomplete, Button, Checkbox, Container, FormControlLabel } from "@mui/material";
+import { Autocomplete, Button, Container } from "@mui/material";
 import Title from "../../components/general/Title";
 import { toast } from "react-toastify";
 import * as EmailValidator from "email-validator";
@@ -9,24 +9,25 @@ import AuthButton from "../../components/general/authButton";
 import { useNavigate } from "react-router-dom";
 import Circle from "../../components/general/Circle";
 import { sxStyles } from "../../hooks/sxStyles";
-import AutorenewIcon from "@mui/icons-material/Autorenew";
 // import "../signUpPage/signUp.css";
 import "../../App.css";
 
-import { isValidIsraeliPhoneNumber, isValidPassword } from "../../hooks/helpFunctions";
+import { isValidIsraeliPhoneNumber, titleCase } from "../../hooks/helpFunctions";
 import { countryList } from "./allCountries";
-import { signup } from "../../services/ApiService";
+import { editUser, getUserInfo, signup } from "../../services/ApiService";
 import PageCircle from "../../components/general/PageCircle";
-function SignPage() {
+import { User } from "../../services/Interfaces";
+function EditProfilePage() {
   // generic
-  const [loading, setLoading] = React.useState(true);
+  const [userInfo, setUserInfo] = React.useState<User>({});
 
+  const [loading, setLoading] = React.useState(true);
   const [loadCircle, setLoadCircle] = React.useState(false);
   const addSxStyle = sxStyles();
   const navigate = useNavigate();
 
   //name useStates
-  const [name, setName] = React.useState("");
+  const [name, setName] = React.useState(userInfo.name || "");
   const [nameLabel, setNameLabel] = React.useState("Name *");
   const [nameErr, setNameErr] = React.useState("");
   const [fieldNameErr, setfieldNameErr] = React.useState(false);
@@ -47,20 +48,8 @@ function SignPage() {
   const [phoneErr, setPhoneErr] = React.useState("");
   const [fieldPhoneErr, setfieldPhoneErr] = React.useState(false);
 
-  // password useStates
-  const [password, setPassword] = React.useState("");
-  const [passwordLabel, setPasswordLabel] = React.useState("Password *");
-  const [passwordErr, setPasswordErr] = React.useState("");
-  const [fieldPasswordErr, setfieldPasswordErr] = React.useState(false);
-  // confirm password useState
-  const [confirmPassword, setconfirmPassword] = React.useState("");
-  const [confirmPasswordLabel, setConfirmPasswordLabel] = React.useState("Confirm password *");
-  const [confirmPasswordErr, setConfirmPasswordErr] = React.useState("");
-  const [fieldconfirmPasswordErr, setfieldConfirmPasswordErr] = React.useState(false);
   // image useState
   const [image, setImage] = React.useState("");
-  // country useState
-  // const [countrySelect, setCountrySelect] = React.useState<string | null>();
 
   const [country, setCountry] = React.useState("");
   const [countryLabel, setCountryLabel] = React.useState("Country *");
@@ -80,17 +69,27 @@ function SignPage() {
   const [houseNumber, setHouseNumber] = React.useState("");
   // zip useState
   const [zip, setZip] = React.useState("");
-  // bizz useState
-  const [bizChecked, setBizChecked] = React.useState(false);
-
-  const handleCheckboxChange = (event: any) => {
-    setBizChecked(event.target.checked);
-  };
 
   React.useEffect(() => {
+    getUserInfo().then((json) => {
+      setUserInfo(json);
+      setName(json.name || "");
+      setLastName(json.lastName || "");
+      setEmail(json.email || "");
+      setPhone(json.phone || "");
+      setCountry(json.country || "");
+      setCity(json.city || "");
+      setStreet(json.street || "");
+      setImage(json.image || "");
+      setZip(json.zip || "");
+      setHouseNumber(json.houseNumber || "");
+
+      console.log(json);
+    });
+
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1200);
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -135,24 +134,8 @@ function SignPage() {
     setPhoneLabel(bool ? "Phone*" : "Error");
   };
 
-  const setPasswordCorrect = (bool: boolean, msg: string = "") => {
-    setPasswordErr(bool ? "" : msg);
-    setfieldPasswordErr(bool ? false : true);
-    setPasswordLabel(bool ? "Password*" : "Error");
-  };
-
-  const setConfirmPasswordCorrect = (bool: boolean) => {
-    setConfirmPasswordLabel(bool ? "Confirm password*" : "");
-    setConfirmPasswordErr(bool ? "" : "The password are not the same!");
-    setfieldConfirmPasswordErr(bool ? false : true);
-  };
-
   const validateButtonCheck = () => {
     EmailValidator.validate(email) ? setEmailCorrect(true) : setEmailCorrect(false);
-    password.length < 6 ? setPasswordCorrect(false, "Password must be atleat 6 chars") : setPasswordCorrect(true);
-    password !== confirmPassword || confirmPassword.length < 1
-      ? setConfirmPasswordCorrect(false)
-      : setConfirmPasswordCorrect(true);
     name.length < 2 ? setNameCorrect(false) : setNameCorrect(true);
     lastName.length < 2 ? setLastNameCorrect(false) : setLastNameCorrect(true);
     isValidIsraeliPhoneNumber(phone) ? setPhoneCorrect(true) : setPhoneCorrect(false);
@@ -161,28 +144,6 @@ function SignPage() {
     street.length < 1 ? setStreetCorrect(false) : setStreetCorrect(true);
   };
 
-  const clearAllFieldsFunc = () => {
-    setName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
-    setconfirmPassword("");
-    setPhone("");
-    setCity("");
-    setStreet("");
-    setImage("");
-    setZip("");
-    setHouseNumber("");
-    setNameCorrect(true);
-    setLastNameCorrect(true);
-    setEmailCorrect(true);
-    setPhoneCorrect(true);
-    setPasswordCorrect(true);
-    setConfirmPasswordCorrect(true);
-    setCountryCorrect(true);
-    setCityCorrect(true);
-    setStreetCorrect(true);
-  };
   const validate = (): boolean => {
     // UI typing validation
 
@@ -190,21 +151,12 @@ function SignPage() {
 
     !EmailValidator.validate(email) ? setEmailCorrect(false) : setEmailCorrect(true);
 
-    !isValidPassword(password) || password.length < 6
-      ? setPasswordCorrect(false, "Password must be atleat 6 chars, password must contain !@%$#^&*-_* and one Capital letter")
-      : setPasswordCorrect(true);
-
-    password !== confirmPassword ? setConfirmPasswordCorrect(false) : setConfirmPasswordCorrect(true);
-
     // Reset empty required inputs from errors
     if (phone.length <= 1) {
       setPhoneCorrect(true);
     }
     if (email.length <= 1) {
       setEmailCorrect(true);
-    }
-    if (password.length <= 1) {
-      setPasswordCorrect(true);
     }
     if (country.length <= 1) {
       setCountryCorrect(true);
@@ -226,10 +178,6 @@ function SignPage() {
       country.length < 1 ||
       city.length < 1 ||
       street.length < 1 ||
-      !password ||
-      password.length < 6 ||
-      !isValidPassword(password) ||
-      password !== confirmPassword ||
       !EmailValidator.validate(email) ||
       !isValidIsraeliPhoneNumber(phone)
     ) {
@@ -247,39 +195,33 @@ function SignPage() {
     console.log({
       name,
       lastName,
-      password,
       phone,
       email,
       street,
-      confirmPassword,
       image,
       country,
       city,
       houseNumber,
       zip,
-      bizChecked,
     });
 
-    signup({
+    editUser({
       name,
       lastName,
-      password,
       phone,
       email,
       street,
-      confirmPassword,
       image,
       country,
       city,
       houseNumber,
       zip,
-      bizChecked,
     })
       .then((user) => {
         console.log(user);
         setLoadCircle(true);
         setTimeout(() => {
-          navigate("/login");
+          navigate("/profile");
         }, 2000);
       })
       .catch((err) => {
@@ -299,7 +241,7 @@ function SignPage() {
         <PageCircle />
       ) : (
         <Box onKeyUp={() => validate()} component="form" sx={{ ...addSxStyle }}>
-          <Title mainText={"Sign up"} subText="Plase sign up" />
+          <Title mainText={`Edit ${titleCase(`${name} ${lastName}`)} Profile Details `} subText="Please edit" />
           <Box display={"flex"} className="myBox">
             <TextField
               className="sign-field"
@@ -344,27 +286,7 @@ function SignPage() {
               helperText={emailErr}
             />
           </Box>
-          <Box display={"flex"} className="myBox">
-            <TextField
-              className="sign-field"
-              label={passwordLabel}
-              variant="outlined"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              error={fieldPasswordErr}
-              helperText={passwordErr}
-            />
 
-            <TextField
-              className="sign-field"
-              label={confirmPasswordLabel}
-              variant="outlined"
-              value={confirmPassword}
-              onChange={(e) => setconfirmPassword(e.target.value)}
-              error={fieldconfirmPasswordErr}
-              helperText={confirmPasswordErr}
-            />
-          </Box>
           <Box display={"flex"} className="myBox">
             <TextField
               className="sign-field"
@@ -373,25 +295,14 @@ function SignPage() {
               value={image}
               onChange={(e) => setImage(e.target.value)}
             />
-
-            <Autocomplete
-              disablePortal
-              options={countryList}
-              inputValue={country}
-              onInputChange={(event, newInputValue) => {
-                setCountry(newInputValue);
-              }}
-              sx={{ width: 620 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={countryLabel}
-                  variant="outlined"
-                  value={country}
-                  error={fieldCountryErr}
-                  helperText={countryErr}
-                />
-              )}
+            <TextField
+              className="sign-field"
+              label={countryLabel}
+              variant="outlined"
+              value={country}
+              error={fieldCountryErr}
+              helperText={countryErr}
+              onChange={(e) => setCountry(e.target.value)}
             />
           </Box>
           <Box display={"flex"} className="myBox">
@@ -431,21 +342,7 @@ function SignPage() {
               onChange={(e) => setZip(e.target.value)}
             />
           </Box>
-          <FormControlLabel
-            control={<Checkbox checked={bizChecked} onChange={handleCheckboxChange} />}
-            label="Signup as Buisness"
-          />
-          <Box>
-            <Button sx={{ width: "50%" }}>Cancel</Button>
-            <Button
-              onClick={() => {
-                clearAllFieldsFunc();
-              }}
-              sx={{ width: "50%" }}
-            >
-              <AutorenewIcon />
-            </Button>
-          </Box>
+
           <AuthButton handleClick={() => handleClick}>Submit {loadCircle && <Circle _size={30} />} </AuthButton>
         </Box>
       )}
@@ -453,4 +350,4 @@ function SignPage() {
   );
 }
 
-export default SignPage;
+export default EditProfilePage;

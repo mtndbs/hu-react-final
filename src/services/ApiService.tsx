@@ -69,6 +69,7 @@ export async function editCard(_id: string, card: Bcard): Promise<Bcard> {
   });
   return res.json();
 }
+
 export async function toggleFavoriteCard(cardId: string): Promise<Bcard> {
   const res = await fetch(`${cardsUrl}${cardId}/favorite`, {
     method: "PUT",
@@ -81,8 +82,43 @@ export async function toggleFavoriteCard(cardId: string): Promise<Bcard> {
 }
 
 // export async function getUserFavoriteCard(): Promise<Array<Bcard>> {
+
+export async function editUser(data: User): Promise<User> {
+  const res = await fetch(`${usersUrl}updateMe`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
 export async function getUserFavoriteCard(): Promise<any> {
   const res = await fetch(`${cardsUrl}getUserFavoriteCards`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${getToken()}`,
+    },
+  });
+  return res.json();
+}
+
+export async function getUserInfo(): Promise<User> {
+  const res = await fetch(`${usersUrl}me`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${getToken()}`,
+    },
+  });
+  return res.json();
+}
+
+export async function getAllUsers(): Promise<Array<User>> {
+  const res = await fetch(`${usersUrl}allUsers`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

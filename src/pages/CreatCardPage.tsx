@@ -13,23 +13,24 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 // import "../signUpPage/signUp.css";
 import { isValidIsraeliPhoneNumber } from "../hooks/helpFunctions";
 import { countryList } from "../pages/signUpPage/allCountries";
-import { addCard } from "../services/ApiService";
-import { UserContext } from "../hooks/UserContext";
+import { addCard, getUserInfo } from "../services/ApiService";
 
 function CreatCardPage() {
-  const { userData } = React.useContext(UserContext);
-
   React.useEffect(() => {
-    setEmail(userData && userData.email ? userData.email : "");
-    setDescription("");
-    setweb("");
-    setPhone(userData && userData.phone ? userData.phone : "");
-    setCity(userData && userData.city ? userData.city : "");
-    setStreet(userData && userData.street ? userData.street : "");
-    setImage("");
-    setZip(userData && userData.zip ? userData.zip : "");
-    setHouseNumber(userData && userData.houseNumber ? userData.houseNumber : "");
-  }, [userData]);
+    getUserInfo().then((json) => {
+      console.log(json);
+
+      setEmail(json && json.email ? json.email : "");
+      setDescription("");
+      setweb("");
+      setPhone(json && json.phone ? json.phone : "");
+      setCity(json && json.city ? json.city : "");
+      setStreet(json && json.street ? json.street : "");
+      setImage("");
+      setZip(json && json.zip ? json.zip : "");
+      setHouseNumber(json && json.houseNumber ? json.houseNumber : "");
+    });
+  }, []);
 
   // generic
   const [loadCircle, setLoadCircle] = React.useState(false);
@@ -354,19 +355,6 @@ function CreatCardPage() {
                 helperText={countryErr}
               />
             )}
-
-            // renderInput={(params) => (
-
-            //   <TextField
-            //     {...params}
-            //     label={countryLabel}
-            //     variant="outlined"
-            //     value={country}
-            //     // onChange={(e) => setCountry(e.target.value)}
-            //     error={fieldCountryErr}
-            //     helperText={countryErr}
-            //   />
-            // )}
           />
         </Box>
         <Box display={"flex"} className="myBox">
@@ -397,10 +385,7 @@ function CreatCardPage() {
           />
           <TextField label={"Zip"} variant="outlined" value={zip} onChange={(e) => setZip(e.target.value)} />
         </Box>
-        {/* <FormControlLabel
-          control={<Checkbox checked={bizChecked} onChange={handleCheckboxChange} />}
-          label="Signup as Buisness"
-        /> */}
+
         <Box>
           <Button sx={{ width: "50%" }}>Cancel</Button>
           <Button

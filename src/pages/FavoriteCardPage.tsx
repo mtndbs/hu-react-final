@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import BuisnessCard from "../components/general/BuisnessCard";
 import CardSkeleton from "../components/general/CardSkeleton";
-import { Container } from "@mui/material";
+import { Alert, Container } from "@mui/material";
 import Title from "../components/general/Title";
 import { SearchContext } from "../hooks/SearchContext";
 import { Bcard } from "../services/Interfaces";
@@ -57,7 +57,7 @@ function FavoriteCardPage() {
 
   return (
     <>
-      <Title mainText="Our Top Biz Cards" />
+      <Title mainText="Buisnesses that you liked" />
       {/* <Container className="mainPageWrap"> */}
       <Container>
         <Box>
@@ -78,6 +78,7 @@ function FavoriteCardPage() {
                 )}
               </Grid>
             ))}
+            {!loading && cards.length < 1 ? <Alert severity="warning">There are no avialble cards</Alert> : <div></div>}
           </Grid>
         </Box>
       </Container>

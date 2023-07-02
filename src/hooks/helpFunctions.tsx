@@ -8,3 +8,10 @@ export const isValidIsraeliPhoneNumber = (phoneNumber: string): boolean => {
 
   return israeliNumberRegex.test(phoneNumber);
 };
+
+export const titleCase = (title: string) => {
+  return title
+    .split(" ")
+    .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};

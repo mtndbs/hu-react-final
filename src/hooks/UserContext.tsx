@@ -16,11 +16,10 @@ export const UserContext = createContext<UserContextType>({
   userData: null,
   setUserData: () => {},
 });
+const userFromToken = getUser();
 
 export const UserProvider = ({ children }: Props) => {
   const [userData, setUserData] = useState<UserData | null>(null);
-
-  const userFromToken = getUser();
 
   useEffect(() => {
     setUserData(userFromToken ? userFromToken : null);

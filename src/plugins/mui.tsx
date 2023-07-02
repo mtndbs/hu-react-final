@@ -3,18 +3,19 @@ import { createTheme, PaletteMode, ThemeProvider } from "@mui/material";
 // const [mode, setMode] = React.useState<'light' | 'dark'>('light');
 
 export const palette = {
-  primary: { main: "#1666ba" },
+  primary: { main: "#1822A5" },
   secondary: { main: "#1c98cc" },
   light: { main: "#4cdede" },
   background: { paper: "#fff", default: "#f5f5f5" },
+  special: { main: "#d4af37" },
 };
 
 const darkPalette = {
-  // mode: "dark",
   primary: { main: "#fffff" },
   secondary: { main: "#696969" },
   light: { main: "#878383" },
   background: { paper: "#1b1b1b", default: "#1b1b1b" },
+  special: { main: "#d4af37" },
 };
 
 function AppThemeProvider({ children, mode }: any) {
@@ -29,10 +30,8 @@ function AppThemeProvider({ children, mode }: any) {
       MuiTextField: {
         styleOverrides: {
           root: {
-            width: "100%",
-
-            margin: 2,
-            // marginBottom: "10px",
+            // width: "100%",
+            // margin: 2,
           },
         },
       },
@@ -45,7 +44,6 @@ function AppThemeProvider({ children, mode }: any) {
       },
     },
     typography: {
-      // fontFamily: "revert",
       h1: {
         fontSize: "2.5rem",
         fontWeight: 700,

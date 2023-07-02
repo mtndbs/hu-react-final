@@ -21,6 +21,9 @@ import "react-toastify/dist/ReactToastify.css";
 import RouteGuard from "./auth/RouteGuard";
 import React from "react";
 import AppThemeProvider from "./plugins/mui";
+import ProfilePage from "./pages/ProfilePage";
+import EditProfilePage from "./pages/signUpPage/EditProfilePage";
+import SandBox from "./pages/SandBox";
 
 function App() {
   const [mode, setMode] = React.useState<"light" | "dark">("light");
@@ -73,6 +76,32 @@ function App() {
                 element={
                   <RouteGuard>
                     <EditCardPage />
+                  </RouteGuard>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <RouteGuard>
+                    <ProfilePage />
+                  </RouteGuard>
+                }
+              />
+              <Route
+                path="/edit-user"
+                element={
+                  <RouteGuard>
+                    <EditProfilePage />
+                  </RouteGuard>
+                }
+              />
+
+              {/* CHANGE TO ADMIN  */}
+              <Route
+                path="/sandbox"
+                element={
+                  <RouteGuard>
+                    <SandBox />
                   </RouteGuard>
                 }
               />

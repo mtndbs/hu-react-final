@@ -3,12 +3,11 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import BuisnessCard from "../components/general/BuisnessCard";
 import CardSkeleton from "../components/general/CardSkeleton";
-import { Alert, Container, Fab } from "@mui/material";
+import { Alert, Container } from "@mui/material";
 import Title from "../components/general/Title";
 import { SearchContext } from "../hooks/SearchContext";
 import { Bcard } from "../services/Interfaces";
 import { deleteCard, getCards, toggleFavoriteCard } from "../services/ApiService";
-import "./../PageStyles/homePage.css";
 import { toast } from "react-toastify";
 import { UserContext } from "../hooks/UserContext";
 function HomePage() {
@@ -84,27 +83,24 @@ function HomePage() {
       <Container>
         <Box>
           <Grid container spacing={2}>
-            {/* {cards.length < 1 && (
-              <Alert variant="filled" severity="warning">
-                There are no avialble cards {errMsg}
-              </Alert>
-            )} */}
-            {filteredData.map((card, index) => (
-              <Grid item xs={11} sm={6} md={4} key={card._id}>
-                {loading ? (
-                  <CardSkeleton />
-                ) : (
-                  <BuisnessCard
-                    key={card._id}
-                    {...card}
-                    onDelete={onDelete}
-                    onToggleFavorit={onToggleFavorit}
-                    favoritePage={false}
-                    index={index}
-                  />
-                )}
-              </Grid>
-            ))}
+            {filteredData &&
+              filteredData.map((card, index) => (
+                <Grid item xs={11} sm={6} md={4} key={card._id}>
+                  {loading ? (
+                    <CardSkeleton />
+                  ) : (
+                    <BuisnessCard
+                      key={card._id}
+                      {...card}
+                      onDelete={onDelete}
+                      onToggleFavorit={onToggleFavorit}
+                      favoritePage={false}
+                      index={index}
+                    />
+                  )}
+                </Grid>
+              ))}
+            {!loading && cards.length < 1 ? <Alert severity="warning">There are no avialble cards</Alert> : <div></div>}
           </Grid>
         </Box>
       </Container>

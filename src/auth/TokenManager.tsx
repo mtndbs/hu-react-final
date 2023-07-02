@@ -18,12 +18,13 @@ export function getUser(): User | undefined {
   const user = localStorage.getItem(userKey);
   if (!user) return;
   const parsedUser = JSON.parse(user);
-  console.log(parsedUser);
   return parsedUser;
 }
 
 export function removeUser() {
   localStorage.removeItem(userKey);
+  localStorage.removeItem(tokenKey);
+  window.location.reload();
 }
 
 export function getToken(): string {
@@ -37,6 +38,13 @@ export function removeToken() {
 
 export function verifyToken(): boolean {
   return getToken().length > 0;
+}
+
+export function verifyUiToken(userData: User): boolean {
+  if (userData && userData.role) {
+    return true;
+  }
+  return false;
 }
 
 export function verifyAdmin(userData: User): boolean {
