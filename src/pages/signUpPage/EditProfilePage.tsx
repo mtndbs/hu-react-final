@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Autocomplete, Button, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import Title from "../../components/general/Title";
 import { toast } from "react-toastify";
 import * as EmailValidator from "email-validator";
@@ -13,8 +13,7 @@ import { sxStyles } from "../../hooks/sxStyles";
 import "../../App.css";
 
 import { isValidIsraeliPhoneNumber, titleCase } from "../../hooks/helpFunctions";
-import { countryList } from "./allCountries";
-import { editUser, getUserInfo, signup } from "../../services/ApiService";
+import { editUser, getUserInfo } from "../../services/ApiService";
 import PageCircle from "../../components/general/PageCircle";
 import { User } from "../../services/Interfaces";
 function EditProfilePage() {

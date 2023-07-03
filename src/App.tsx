@@ -40,7 +40,7 @@ function App() {
         <Header themeToggle={themeToggle} />
         <ToastContainer position="top-right" theme="light" />
         <Container fixed sx={{ margin: "10px auto" }}>
-          <Container sx={{ margin: "60px auto" }}>
+          <Container sx={{ margin: "60px auto", minHeight: "700px" }}>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
@@ -58,7 +58,7 @@ function App() {
               <Route
                 path="/my-cards"
                 element={
-                  <RouteGuard>
+                  <RouteGuard level={2}>
                     <MyCardsPage />
                   </RouteGuard>
                 }

@@ -9,19 +9,19 @@ import { SearchContext } from "../hooks/SearchContext";
 import { Bcard } from "../services/Interfaces";
 import { deleteCard, getUserCards, toggleFavoriteCard } from "../services/ApiService";
 import { toast } from "react-toastify";
+import PageCircle from "../components/general/PageCircle";
 
 function MyCardsPage() {
   const [loading, setLoading] = React.useState(true);
   const [cards, setCards] = React.useState<Array<Bcard>>([]);
   const { searchValue } = React.useContext(SearchContext);
   const [filteredData, setFilteredData] = React.useState<Array<Bcard>>([]);
-  const [errMsg, setErrMsg] = React.useState("");
 
   // Skeleton use effect laoder
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -29,13 +29,11 @@ function MyCardsPage() {
     const getData = async () => {
       getUserCards()
         .then((json) => {
-          console.log(json);
           setCards(json);
           setFilteredData(json);
         })
         .catch((err) => {
           console.log(err.message);
-          setErrMsg(`  :${err.message}`);
         });
     };
     console.log(cards.length < 1);
@@ -68,6 +66,7 @@ function MyCardsPage() {
   return (
     <>
       <Title mainText="User cards" />
+      {loading && filteredData.length < 1 ? <PageCircle /> : <span></span>}
       <Container className="mainPageWrap">
         <Box>
           <Grid container spacing={2}>

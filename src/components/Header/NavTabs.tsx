@@ -4,10 +4,11 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Link, useNavigate } from "react-router-dom";
 import { Container } from "@mui/material";
-import { removeToken, removeUser, verifyToken, verifyAdmin, verifyUiToken } from "./../../auth/TokenManager";
+import { removeUser, verifyToken, verifyAdmin, verifyUiToken } from "./../../auth/TokenManager";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { UserContext } from "../../hooks/UserContext";
 import { green } from "@mui/material/colors";
+import { palette } from "../../plugins/mui";
 
 function a11yProps(index: number) {
   return {
@@ -56,8 +57,8 @@ export default function NavTabs() {
           <Tab
             label="Admin"
             to="/sandbox"
-            sx={{ color: "white", opacity: 1 }}
-            icon={<AdminPanelSettingsIcon />}
+            sx={{ color: palette.special.main, opacity: 1 }}
+            icon={<AdminPanelSettingsIcon sx={{ color: palette.special.main }} />}
             component={Link}
             {...a11yProps(3)}
           />

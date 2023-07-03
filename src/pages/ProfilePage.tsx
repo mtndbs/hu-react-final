@@ -1,13 +1,11 @@
-import { Container, Box, Avatar, Typography, TextField, Button } from "@mui/material";
+import { Container, Box, Avatar, Typography, TextField } from "@mui/material";
 import { palette } from "../plugins/mui";
 import { useEffect } from "react";
 import { getUserInfo } from "../services/ApiService";
 import { User } from "../services/Interfaces";
 import React from "react";
-import Circle from "../components/general/Circle";
 import PageCircle from "../components/general/PageCircle";
 import { titleCase } from "../hooks/helpFunctions";
-import { toast } from "react-toastify";
 import RegularButton from "../components/general/RegularButton";
 import { useNavigate } from "react-router-dom";
 
@@ -19,16 +17,6 @@ function ProfilePage() {
   const navigate = useNavigate();
 
   // Edit states
-  // const [editToggle, setEditToggle] = React.useState(true);
-
-  // const handleEditToggle = () => {
-  //   setEditToggle(!editToggle);
-  //   if (editToggle) {
-  //     toast.success("Now edit user Avialble!");
-  //   } else {
-  //     toast.info("Now edit NOT Avialble!");
-  //   }
-  // };
 
   const handleEdit = () => {
     navigate("/edit-user");
@@ -58,7 +46,6 @@ function ProfilePage() {
             <Box
               sx={{
                 margin: "10px auto",
-                // backgroundColor: palette.secondary.main,
               }}
             >
               <Box className="avatar-wrap">

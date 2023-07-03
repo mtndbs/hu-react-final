@@ -7,7 +7,6 @@ import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PreviewIcon from "@mui/icons-material/Preview";
@@ -15,12 +14,7 @@ import CallIcon from "@mui/icons-material/Call";
 
 import { Bcard } from "../../services/Interfaces";
 // modal
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 import { getUser, verifyAdmin, verifyToken } from "../../auth/TokenManager";
@@ -28,6 +22,7 @@ import { palette } from "./../../plugins/mui";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { UserContext } from "../../hooks/UserContext";
+import GerenralModal from "./GeneralModal";
 
 interface Props extends Bcard {
   user_id?: string;
@@ -165,17 +160,18 @@ function BuisnessCard({
             >
               <CallIcon />
             </IconButton>
-            {verifyAdmin(userData!) ||
-              (ifCardBelongToThisUserFunc(userData?._id) && (
-                <IconButton
-                  aria-label="edit"
-                  onClick={() => {
-                    navigate(`edit-card/${_id}`);
-                  }}
-                >
-                  <ModeEditIcon />
-                </IconButton>
-              ))}
+            {verifyAdmin(userData!) || ifCardBelongToThisUserFunc(userData?._id) ? (
+              <IconButton
+                aria-label="edit"
+                onClick={() => {
+                  navigate(`edit-card/${_id}`);
+                }}
+              >
+                <ModeEditIcon />
+              </IconButton>
+            ) : (
+              <span></span>
+            )}
 
             <Box>
               <IconButton
@@ -201,33 +197,16 @@ function BuisnessCard({
       </Card>
 
       {/* ================== Modal Dialog ======================= */}
-      <div>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          sx={{ borderRadius: "10px" }}
-        >
-          <DialogTitle id="alert-dialog-title">{"DELETE , deleting card from the database"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText color={red[500]} id="alert-dialog-description">
-              You're Should you want to Delete "{title}" card?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button
-              onClick={() => {
-                onDelete(_id);
-              }}
-              autoFocus
-            >
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
+      <GerenralModal
+        open={open}
+        handleCloseFunc={handleClose}
+        onDeleteFunc={() => {
+          onDelete(_id);
+        }}
+        title={"DELETE , deleting card from the database"}
+      >
+        You're Should you want to Delete "{title}" card?
+      </GerenralModal>
     </>
   );
 }

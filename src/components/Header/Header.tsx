@@ -23,11 +23,13 @@ import { Drawer, useMediaQuery, useTheme } from "@mui/material";
 import { SearchContext } from "../../hooks/SearchContext";
 import AppTitle from "../AppTitle";
 import DrawerTabs from "./DrawerTabs";
-import { removeToken, removeUser, verifyToken, verifyUiToken } from "../../auth/TokenManager";
+import { removeToken, removeUser, verifyAdmin, verifyToken, verifyUiToken } from "../../auth/TokenManager";
 import "./../../App.css";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../hooks/UserContext";
 import { palette } from "../../plugins/mui";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -161,7 +163,7 @@ export default function Header({ themeToggle }: Props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* Item I */}
+      {/* Item 1 */}
       <MenuItem
         onClick={() => {
           navigate("/login");
@@ -172,7 +174,7 @@ export default function Header({ themeToggle }: Props) {
         </IconButton>
         <p>Log-In</p>
       </MenuItem>
-      {/* Item II */}
+      {/* Item 2 */}
       <MenuItem
         onClick={() => {
           removeUser();
@@ -183,19 +185,40 @@ export default function Header({ themeToggle }: Props) {
         </IconButton>
         <p>Log-Out</p>
       </MenuItem>
-      {/* Item III */}
+      {/* Item 3 */}
       <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
+        <IconButton>
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
+
+      {/* Item 4 */}
+
+      <MenuItem
+        onClick={() => {
+          themeToggle();
+        }}
+      >
+        <IconButton>{theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}</IconButton>
+        <p>Mode</p>
+      </MenuItem>
+
+      {/* Item 5 */}
+
+      {verifyAdmin(userData!) && (
+        <MenuItem
+          onClick={() => {
+            navigate("/sandBox");
+          }}
+        >
+          <IconButton size="large" color="inherit">
+            {/* <LoginIcon /> */}
+            <AdminPanelSettingsIcon sx={{ color: palette.special.main }} />
+          </IconButton>
+          <p>Admin</p>
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -215,8 +238,8 @@ export default function Header({ themeToggle }: Props) {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography variant="h3" noWrap component="div" sx={{ display: { xs: "none", sm: "block" }, minWidth: "120px" }}>
-            <AppTitle />
+          <Typography variant="h3" noWrap component="div" sx={{ display: { xs: "none", sm: "block" }, minWidth: "140px" }}>
+            <AppTitle size={"24px"} />
           </Typography>
           <Search>
             <SearchIconWrapper>

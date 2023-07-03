@@ -1,10 +1,10 @@
 import AnimationSharpIcon from "@mui/icons-material/AnimationSharp";
 import { useNavigate } from "react-router-dom";
-// interface Props {
-//   size?: string | null;
-// }
+interface Props {
+  size?: any;
+}
 
-function AppTitle({}) {
+function AppTitle({ size = "20px" }: Props) {
   const navigate = useNavigate();
   return (
     <>
@@ -15,8 +15,8 @@ function AppTitle({}) {
           navigate("/");
         }}
       >
-        <span style={{ fontSize: "20px" }}>Buisness</span>
-        <AnimationSharpIcon sx={{ color: "#d4af37" }} />
+        <span style={{ fontSize: size }}>BuisCase</span>
+        <AnimationSharpIcon sx={{ color: "#d4af37", width: size, height: size }} />
       </div>
     </>
   );

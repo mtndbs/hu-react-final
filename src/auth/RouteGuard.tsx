@@ -1,17 +1,25 @@
 import { Navigate } from "react-router-dom";
-import { verifyToken } from "./TokenManager";
+import { verifyBiz, verifyToken } from "./TokenManager";
 import { ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
+  level?: number;
 }
 
-function RouteGuard({ children }: Props) {
-  return verifyToken() ? (
-    <>{children}</>
-  ) : (
-    <Navigate to="/login" replace={true} />
-  );
+const guardLevelFunc = (level: number) => {
+  if (level === 1) {
+    return verifyToken();
+  }
+  if (level === 2) {
+    return verifyBiz();
+  } else {
+    return false;
+  }
+};
+
+function RouteGuard({ children, level = 1 }: Props) {
+  return guardLevelFunc(level) ? <>{children}</> : <Navigate to="/login" replace={true} />;
 }
 
 export default RouteGuard;

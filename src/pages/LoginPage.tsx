@@ -116,7 +116,7 @@ function LoginPage() {
           setLoadCircle(false);
           setPasswordCorrect(false);
           setEmailCorrect(false);
-          toast.error(json.message, { autoClose: false });
+          toast.error(json.message, { hideProgressBar: true });
           return;
         }
         if (json.token) {

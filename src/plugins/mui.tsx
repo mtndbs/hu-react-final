@@ -12,7 +12,7 @@ export const palette = {
 
 const darkPalette = {
   primary: { main: "#fffff" },
-  secondary: { main: "#696969" },
+  secondary: { main: "#1c98cc" },
   light: { main: "#878383" },
   background: { paper: "#1b1b1b", default: "#1b1b1b" },
   special: { main: "#d4af37" },
@@ -30,8 +30,8 @@ function AppThemeProvider({ children, mode }: any) {
       MuiTextField: {
         styleOverrides: {
           root: {
-            // width: "100%",
-            // margin: 2,
+            width: "100%",
+            margin: 2,
           },
         },
       },
@@ -45,11 +45,11 @@ function AppThemeProvider({ children, mode }: any) {
     },
     typography: {
       h1: {
-        fontSize: "2.5rem",
+        fontSize: "3.8rem",
         fontWeight: 700,
       },
       h2: {
-        fontSize: "1.7rem",
+        fontSize: "2.5rem",
         fontWeight: 700,
       },
       h3: {

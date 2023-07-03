@@ -15,7 +15,6 @@ function HomePage() {
   const [cards, setCards] = React.useState<Array<Bcard>>([]);
   const { searchValue } = React.useContext(SearchContext);
   const [filteredData, setFilteredData] = React.useState<Array<Bcard>>([]);
-  const [errMsg, setErrMsg] = React.useState("");
 
   const { userData } = React.useContext(UserContext);
 
@@ -40,7 +39,7 @@ function HomePage() {
           setFilteredData(json);
         })
         .catch((err) => {
-          setErrMsg(`  :${err.message}`);
+          console.log(err);
         });
     };
     getData();
@@ -57,6 +56,7 @@ function HomePage() {
 
   const onDelete = async (id: string) => {
     deleteCard(id).then(() => {
+      // eslint-disable-next-line array-callback-return
       const updated = filteredData.filter((card) => {
         if (card._id === id) {
           toast.success(`${card.title} deleted succesfully!`);
@@ -78,7 +78,6 @@ function HomePage() {
 
   return (
     <>
-      <h1>{userData ? userData.role : "unknown"}</h1>
       <Title mainText="Our Top Biz Cards" />
       <Container>
         <Box>

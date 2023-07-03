@@ -54,7 +54,6 @@ export async function deleteCard(_id: string): Promise<any> {
       authorization: `Bearer ${getToken()}`,
     },
   });
-  console.log(res);
   return res;
 }
 
@@ -93,6 +92,28 @@ export async function editUser(data: User): Promise<User> {
     body: JSON.stringify(data),
   });
   return res.json();
+}
+
+export async function adminSetUser(data: User): Promise<User> {
+  const res = await fetch(`${usersUrl}adminSet`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function adminDeleteUser(_id: User): Promise<User> {
+  const res = await fetch(`${usersUrl}deleteUser/${_id}`, {
+    method: "DELETE",
+    headers: {
+      authorization: `Bearer ${getToken()}`,
+    },
+  });
+  return res;
 }
 
 export async function getUserFavoriteCard(): Promise<any> {
@@ -149,25 +170,3 @@ export async function login(user: User): Promise<User> {
   });
   return res.json();
 }
-
-// export async function addOrder(order: Order): Promise<Order> {
-//   const res = await fetch(`${serverUrl}orders`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(order),
-//   });
-//   return res.json();
-// }
-
-// };
-// export const getData = async () => {
-//   try {
-//     const response = await axios.get(`${serverUrl}cards/homepageCards`);
-//     console.log(response.data);
-//     return response.data;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };

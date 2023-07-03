@@ -14,11 +14,8 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { isValidIsraeliPhoneNumber } from "../hooks/helpFunctions";
 import { countryList } from "../pages/signUpPage/allCountries";
 import { addCard, getCardById } from "../services/ApiService";
-import { UserContext } from "../hooks/UserContext";
 
 function EditCardPage() {
-  const { userData } = React.useContext(UserContext);
-
   // generic
   const [loadCircle, setLoadCircle] = React.useState(false);
   const addSxStyle = sxStyles();
@@ -361,19 +358,6 @@ function EditCardPage() {
                 helperText={countryErr}
               />
             )}
-
-            // renderInput={(params) => (
-
-            //   <TextField
-            //     {...params}
-            //     label={countryLabel}
-            //     variant="outlined"
-            //     value={country}
-            //     // onChange={(e) => setCountry(e.target.value)}
-            //     error={fieldCountryErr}
-            //     helperText={countryErr}
-            //   />
-            // )}
           />
         </Box>
         <Box display={"flex"} className="myBox">
@@ -404,10 +388,7 @@ function EditCardPage() {
           />
           <TextField label={"Zip"} variant="outlined" value={zip} onChange={(e) => setZip(e.target.value)} />
         </Box>
-        {/* <FormControlLabel
-          control={<Checkbox checked={bizChecked} onChange={handleCheckboxChange} />}
-          label="Signup as Buisness"
-        /> */}
+
         <Box>
           <Button sx={{ width: "50%" }}>Cancel</Button>
           <Button

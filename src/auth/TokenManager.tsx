@@ -39,6 +39,12 @@ export function removeToken() {
 export function verifyToken(): boolean {
   return getToken().length > 0;
 }
+export function verifyBiz(): boolean {
+  return getUser()?.bizChecked ? true : false;
+}
+// export function verifyAdmin(): boolean {
+//   return getUser()?.bizChecked ? true : false;
+// }
 
 export function verifyUiToken(userData: User): boolean {
   if (userData && userData.role) {

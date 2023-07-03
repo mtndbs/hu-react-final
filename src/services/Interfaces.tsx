@@ -42,10 +42,11 @@ export interface User {
   bizChecked?: boolean | null; // from sign form
   token?: string | undefined;
   biz?: boolean; // from token
-  // role?: role | null;
   role?: any;
   street?: string | null;
   favorites?: [string] | null;
   status?: any;
   message?: string;
+  active?: boolean;
+  data?: any;
 }
