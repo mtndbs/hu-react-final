@@ -8,6 +8,7 @@ import Title from "../components/general/Title";
 import { SearchContext } from "../hooks/SearchContext";
 import { Bcard } from "../services/Interfaces";
 import { deleteCard, getUserFavoriteCard, toggleFavoriteCard } from "../services/ApiService";
+import PageCircle from "../components/general/PageCircle";
 function FavoriteCardPage() {
   const [loading, setLoading] = React.useState(true);
   const [cards, setCards] = React.useState<Array<Bcard>>([]);
@@ -58,7 +59,7 @@ function FavoriteCardPage() {
   return (
     <>
       <Title mainText="Buisnesses that you liked" />
-      {/* <Container className="mainPageWrap"> */}
+      {loading && filteredData.length < 1 ? <PageCircle /> : <span></span>}
       <Container>
         <Box>
           <Grid container>

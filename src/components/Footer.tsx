@@ -10,6 +10,7 @@ import { UserContext } from "../hooks/UserContext";
 import InfoIcon from "@mui/icons-material/Info";
 import { verifyAdmin } from "../auth/TokenManager";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { palette } from "../plugins/mui";
 export default function LabelBottomNavigation() {
   const [value, setValue] = React.useState("recents");
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ export default function LabelBottomNavigation() {
       )}
       <Paper
         sx={{
+          color: "inherit",
           position: "fixed",
           bottom: 0,
           left: 0,
@@ -49,12 +51,13 @@ export default function LabelBottomNavigation() {
       >
         <BottomNavigation showLabels sx={{ width: 500 }} value={value} onChange={handleChange}>
           <BottomNavigationAction
+            sx={{ color: palette.secondary.main }}
             label="Back"
             value="Back"
             onClick={() => {
               navigate(-1);
             }}
-            icon={<ArrowBackIcon />}
+            icon={<ArrowBackIcon sx={{ color: "inherit" }} />}
           />
 
           <BottomNavigationAction
