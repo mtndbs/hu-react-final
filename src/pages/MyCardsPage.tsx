@@ -36,7 +36,6 @@ function MyCardsPage() {
           console.log(err.message);
         });
     };
-    console.log(cards.length < 1);
     getData();
   }, []);
 

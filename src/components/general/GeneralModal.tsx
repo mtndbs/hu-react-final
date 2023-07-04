@@ -1,6 +1,5 @@
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
 import { red } from "@mui/material/colors";
-import { title } from "process";
 import { ReactNode } from "react";
 
 interface Props {

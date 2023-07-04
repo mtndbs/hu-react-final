@@ -7,7 +7,6 @@ import MapboxMap from "../hooks/MapboxMap";
 import { Bcard } from "../services/Interfaces";
 import PageCircle from "../components/general/PageCircle";
 import InfoBadge from "../components/general/InfoBadge";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -23,7 +22,6 @@ function ViewCardPage() {
     const getData = async () => {
       getCardById(id)
         .then((card) => {
-          console.log(card);
           setBuisness(card);
         })
         .catch((err) => {
@@ -66,10 +64,6 @@ function ViewCardPage() {
                 {subTitle}
               </Typography>
               <Typography variant="body2" padding={2} gutterBottom>
-                {/* {Buisness.country}
-            {Buisness.city}
-            {Buisness.houseNumber}
-          {Buisness.email} */}
                 {Buisness.subTitle}
               </Typography>
             </Box>

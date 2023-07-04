@@ -8,9 +8,12 @@ import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { UserContext } from "../hooks/UserContext";
 import InfoIcon from "@mui/icons-material/Info";
-import { verifyAdmin } from "../auth/TokenManager";
+import { verifyUiAdmin } from "../auth/TokenManager";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { palette } from "../plugins/mui";
+
+console.error = () => {};
+
 export default function LabelBottomNavigation() {
   const [value, setValue] = React.useState("recents");
   const navigate = useNavigate();
@@ -22,7 +25,7 @@ export default function LabelBottomNavigation() {
 
   return (
     <>
-      {userData?.bizChecked || verifyAdmin(userData!) ? (
+      {userData?.bizChecked || verifyUiAdmin(userData!) ? (
         <Fab
           color="primary"
           sx={{ position: "fixed", bottom: "10vh", left: "80%", width: "70px", height: "70px" }}
@@ -49,7 +52,12 @@ export default function LabelBottomNavigation() {
         }}
         elevation={3}
       >
-        <BottomNavigation showLabels sx={{ width: 500 }} value={value} onChange={handleChange}>
+        <BottomNavigation
+          showLabels
+          sx={{ width: 500, borderTopLeftRadius: "50px", borderTopRightRadius: "50px" }}
+          value={value}
+          onChange={handleChange}
+        >
           <BottomNavigationAction
             sx={{ color: palette.secondary.main }}
             label="Back"
@@ -69,7 +77,7 @@ export default function LabelBottomNavigation() {
             icon={<InfoIcon />}
           />
 
-          {userData?.bizChecked || verifyAdmin(userData!) ? (
+          {userData?.bizChecked || verifyUiAdmin(userData!) ? (
             <BottomNavigationAction
               label="Favorites"
               value="favorites"
@@ -81,7 +89,7 @@ export default function LabelBottomNavigation() {
           ) : (
             <span></span>
           )}
-          {userData?.bizChecked || verifyAdmin(userData!) ? (
+          {userData?.bizChecked || verifyUiAdmin(userData!) ? (
             <BottomNavigationAction
               label="My cards!"
               onClick={() => {

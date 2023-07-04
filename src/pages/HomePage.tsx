@@ -28,13 +28,8 @@ function HomePage() {
 
   React.useEffect(() => {
     const getData = async () => {
-      console.log(userData);
       getCards()
         .then((json) => {
-          // if (json.status.toLowerCase() === "fail") {
-          //   toast.error(json.message);
-          //   return;
-          // }
           setCards(json);
           setFilteredData(json);
         })
@@ -78,7 +73,7 @@ function HomePage() {
 
   return (
     <>
-      <Title mainText="Our Top Biz Cards" />
+      <Title mainText="Welcome To BuisCase" subText="Choose your case with our top buisnesses" />
       <Container>
         <Box>
           <Grid container spacing={2}>

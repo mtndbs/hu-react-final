@@ -42,9 +42,9 @@ export function verifyToken(): boolean {
 export function verifyBiz(): boolean {
   return getUser()?.bizChecked ? true : false;
 }
-// export function verifyAdmin(): boolean {
-//   return getUser()?.bizChecked ? true : false;
-// }
+export function verifyAdmin(): boolean {
+  return getUser()?.role === "admin" ? true : false;
+}
 
 export function verifyUiToken(userData: User): boolean {
   if (userData && userData.role) {
@@ -53,7 +53,7 @@ export function verifyUiToken(userData: User): boolean {
   return false;
 }
 
-export function verifyAdmin(userData: User): boolean {
+export function verifyUiAdmin(userData: User): boolean {
   if (userData && userData.role === "admin") {
     return true;
   }

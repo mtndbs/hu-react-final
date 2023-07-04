@@ -2,9 +2,9 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Container } from "@mui/material";
-import { removeUser, verifyToken, verifyAdmin, verifyUiToken } from "./../../auth/TokenManager";
+import { removeUser, verifyToken, verifyUiAdmin, verifyUiToken } from "./../../auth/TokenManager";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { UserContext } from "../../hooks/UserContext";
 import { green } from "@mui/material/colors";
@@ -19,9 +19,7 @@ function a11yProps(index: number) {
 
 export default function NavTabs() {
   const [value, setValue] = React.useState(0);
-  const navigate = useNavigate();
   const { userData } = React.useContext(UserContext);
-  console.log(userData);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -41,7 +39,7 @@ export default function NavTabs() {
           <Tab label="Home" to="/" sx={{ color: "white" }} component={Link} {...a11yProps(0)} />
           <Tab label="About" to="/about" sx={{ color: "white" }} component={Link} {...a11yProps(1)} />
 
-          {userData?.bizChecked || verifyAdmin(userData!) ? (
+          {userData?.bizChecked || verifyUiAdmin(userData!) ? (
             <Tab label="My Cards" to="/my-cards" sx={{ color: "white" }} component={Link} {...a11yProps(2)} />
           ) : (
             <span></span>
@@ -53,7 +51,7 @@ export default function NavTabs() {
         </Tabs>
       </Box>
       <Box sx={{ display: { xs: "none", md: "flex" } }}>
-        {verifyAdmin(userData!) && (
+        {verifyUiAdmin(userData!) && (
           <Tab
             label="Admin"
             to="/sandbox"

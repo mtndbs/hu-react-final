@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { verifyBiz, verifyToken } from "./TokenManager";
+import { verifyAdmin, verifyBiz, verifyToken } from "./TokenManager";
 import { ReactNode } from "react";
 
 interface Props {
@@ -12,7 +12,10 @@ const guardLevelFunc = (level: number) => {
     return verifyToken();
   }
   if (level === 2) {
-    return verifyBiz();
+    return verifyBiz() || verifyAdmin();
+  }
+  if (level === 3) {
+    return verifyAdmin();
   } else {
     return false;
   }

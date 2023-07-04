@@ -18,8 +18,6 @@ import { addCard, getUserInfo } from "../services/ApiService";
 function CreatCardPage() {
   React.useEffect(() => {
     getUserInfo().then((json) => {
-      console.log(json);
-
       setEmail(json && json.email ? json.email : "");
       setDescription("");
       setweb("");
@@ -73,6 +71,7 @@ function CreatCardPage() {
   let [image, setImage] = React.useState("");
   // country useState
   const [country, setCountry] = React.useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [countrySelect, setCountrySelect] = React.useState<string | null>();
   const [countryLabel, setCountryLabel] = React.useState("Country *");
   const [countryErr, setCountryErr] = React.useState("");
@@ -179,7 +178,6 @@ function CreatCardPage() {
     setStreetCorrect(true);
   };
   const validate = (): boolean => {
-    console.log("validateOn");
     !isValidIsraeliPhoneNumber(phone) ? setPhoneCorrect(false) : setPhoneCorrect(true);
 
     !EmailValidator.validate(email) ? setEmailCorrect(false) : setEmailCorrect(true);
@@ -238,20 +236,6 @@ function CreatCardPage() {
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
 
-    console.log({
-      title,
-      subTitle,
-      description,
-      phone,
-      email,
-      web,
-      image,
-      country,
-      city,
-      houseNumber,
-      zip,
-      street,
-    });
     setLoadCircle(true);
 
     addCard({ title, subTitle, description, phone, email, web, image, country, city, street, houseNumber, zip })

@@ -244,21 +244,6 @@ function SignPage() {
       validateButtonCheck();
       return;
     }
-    console.log({
-      name,
-      lastName,
-      password,
-      phone,
-      email,
-      street,
-      confirmPassword,
-      image,
-      country,
-      city,
-      houseNumber,
-      zip,
-      bizChecked,
-    });
 
     signup({
       name,

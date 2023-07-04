@@ -94,7 +94,6 @@ function LoginPage() {
       return false;
     }
 
-    console.log(email);
     if (!EmailValidator.validate(email)) {
       setEmailCorrect(false);
       return false;

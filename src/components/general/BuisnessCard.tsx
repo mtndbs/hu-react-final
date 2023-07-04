@@ -17,7 +17,7 @@ import { Bcard } from "../../services/Interfaces";
 
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
-import { getUser, verifyAdmin, verifyToken } from "../../auth/TokenManager";
+import { getUser, verifyUiAdmin, verifyToken } from "../../auth/TokenManager";
 import { palette } from "./../../plugins/mui";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
@@ -125,7 +125,7 @@ function BuisnessCard({
         <CardMedia
           component="img"
           height="194"
-          image={image!}
+          image={image ? image : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
           alt=""
           sx={{ cursor: "pointer" }}
           onClick={() => {
@@ -160,7 +160,7 @@ function BuisnessCard({
             >
               <CallIcon />
             </IconButton>
-            {verifyAdmin(userData!) || ifCardBelongToThisUserFunc(userData?._id) ? (
+            {verifyUiAdmin(userData!) || ifCardBelongToThisUserFunc(userData?._id) ? (
               <IconButton
                 aria-label="edit"
                 onClick={() => {
@@ -181,7 +181,7 @@ function BuisnessCard({
               >
                 <PreviewIcon />
               </IconButton>
-              {verifyAdmin(userData!) && (
+              {verifyUiAdmin(userData!) && (
                 <IconButton
                   onClick={() => {
                     handleClickOpen();

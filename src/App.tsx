@@ -47,35 +47,12 @@ function App() {
               <Route path="/sign" element={<SignPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/view-card/:id" element={<ViewCardPage />} />
-              <Route
-                path="/create-card"
-                element={
-                  <RouteGuard>
-                    <CreatCardPage />
-                  </RouteGuard>
-                }
-              />
-              <Route
-                path="/my-cards"
-                element={
-                  <RouteGuard level={2}>
-                    <MyCardsPage />
-                  </RouteGuard>
-                }
-              />
+
               <Route
                 path="/favorite-card"
                 element={
                   <RouteGuard>
                     <FavoriteCardPage />
-                  </RouteGuard>
-                }
-              />
-              <Route
-                path="/edit-card/:id"
-                element={
-                  <RouteGuard>
-                    <EditCardPage />
                   </RouteGuard>
                 }
               />
@@ -95,12 +72,35 @@ function App() {
                   </RouteGuard>
                 }
               />
+              <Route
+                path="/create-card"
+                element={
+                  <RouteGuard level={2}>
+                    <CreatCardPage />
+                  </RouteGuard>
+                }
+              />
+              <Route
+                path="/my-cards"
+                element={
+                  <RouteGuard level={2}>
+                    <MyCardsPage />
+                  </RouteGuard>
+                }
+              />
+              <Route
+                path="/edit-card/:id"
+                element={
+                  <RouteGuard level={2}>
+                    <EditCardPage />
+                  </RouteGuard>
+                }
+              />
 
-              {/* CHANGE TO ADMIN  */}
               <Route
                 path="/sandbox"
                 element={
-                  <RouteGuard>
+                  <RouteGuard level={3}>
                     <SandBox />
                   </RouteGuard>
                 }
