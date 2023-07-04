@@ -10,7 +10,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Circle from "../components/general/Circle";
 import { sxStyles } from "../hooks/sxStyles";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
-// import "../signUpPage/signUp.css";
 import { isValidIsraeliPhoneNumber } from "../hooks/helpFunctions";
 import { countryList } from "../pages/signUpPage/allCountries";
 import { addCard, getCardById } from "../services/ApiService";
@@ -58,6 +57,7 @@ function EditCardPage() {
   let [image, setImage] = React.useState("");
   // country useState
   const [country, setCountry] = React.useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [countrySelect, setCountrySelect] = React.useState<string | null>();
   const [countryLabel, setCountryLabel] = React.useState("Country *");
   const [countryErr, setCountryErr] = React.useState("");
@@ -182,7 +182,6 @@ function EditCardPage() {
     setStreetCorrect(true);
   };
   const validate = (): boolean => {
-    console.log("validateOn");
     !isValidIsraeliPhoneNumber(phone) ? setPhoneCorrect(false) : setPhoneCorrect(true);
 
     !EmailValidator.validate(email) ? setEmailCorrect(false) : setEmailCorrect(true);
@@ -239,22 +238,7 @@ function EditCardPage() {
     if (image.length < 2) {
       image = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
 
-    console.log({
-      title,
-      subTitle,
-      description,
-      phone,
-      email,
-      web,
-      image,
-      country,
-      city,
-      houseNumber,
-      zip,
-      street,
-    });
     setLoadCircle(true);
 
     addCard({ title, subTitle, description, phone, email, web, image, country, city, street, houseNumber, zip })

@@ -1,6 +1,5 @@
 import { Box, Link } from "@mui/material";
 import { ReactNode } from "react";
-import { palette } from "../../plugins/mui";
 
 interface Props {
   //   children: ReactNode;
@@ -28,7 +27,6 @@ function InfoBadge({ data, icon, link, bgColor = "" }: Props) {
         justifyContent={"center"}
         sx={{
           borderRadius: "50%",
-          backgroundColor: palette.background.default,
           width: "30px",
           height: "30px",
           paddingTop: "3px",

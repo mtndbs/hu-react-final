@@ -7,7 +7,11 @@ interface Props {
 function AuthButton({ children, handleClick }: Props) {
   return (
     <>
-      <Button sx={{ height: "45px", borderRadius: "14px" }} variant="contained" onClick={handleClick()}>
+      <Button
+        sx={{ height: "45px", borderRadius: "14px", color: "white", backgroundColor: "primary" }}
+        variant="contained"
+        onClick={handleClick()}
+      >
         {children}
       </Button>
     </>

@@ -12,7 +12,6 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
@@ -23,7 +22,7 @@ import { Drawer, useMediaQuery, useTheme } from "@mui/material";
 import { SearchContext } from "../../hooks/SearchContext";
 import AppTitle from "../AppTitle";
 import DrawerTabs from "./DrawerTabs";
-import { removeToken, removeUser, verifyAdmin, verifyToken, verifyUiToken } from "../../auth/TokenManager";
+import { removeUser, verifyUiAdmin, verifyToken, verifyUiToken } from "../../auth/TokenManager";
 import "./../../App.css";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../hooks/UserContext";
@@ -206,7 +205,7 @@ export default function Header({ themeToggle }: Props) {
 
       {/* Item 5 */}
 
-      {verifyAdmin(userData!) && (
+      {verifyUiAdmin(userData!) && (
         <MenuItem
           onClick={() => {
             navigate("/sandBox");
@@ -283,11 +282,6 @@ export default function Header({ themeToggle }: Props) {
               }}
             >
               {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
             </IconButton>
 
             <IconButton
